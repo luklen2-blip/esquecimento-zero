@@ -1,0 +1,65 @@
+[
+  {
+    "id": "cat_eletronicos",
+    "name": "Eletrônicos & Tecnologia",
+    "icon": "laptop",
+    "color": "#3B82F6",
+    "isSystem": true,
+    "createdAt": "2026-10-05T22:28:01.846Z",
+    "updatedAt": "2026-10-05T22:28:01.847Z"
+  },
+  {
+    "id": "cat_eletrodomesticos",
+    "name": "Eletrodomésticos & Casa",
+    "icon": "home",
+    "color": "#10B981",
+    "isSystem": true,
+    "createdAt": "2026-10-05T22:28:01.851Z",
+    "updatedAt": "2026-10-05T22:28:01.851Z"
+  },
+  {
+    "id": "cat_alimentos",
+    "name": "Alimentos & Despensa",
+    "icon": "apple",
+    "color": "#F59E0B",
+    "isSystem": true,
+    "createdAt": "2026-10-05T22:28:01.854Z",
+    "updatedAt": "2026-10-05T22:28:01.854Z"
+  },
+  {
+    "id": "cat_saude",
+    "name": "Medicamentos & Saúde",
+    "icon": "pill",
+    "color": "#EF4444",
+    "isSystem": true,
+    "createdAt": "2026-10-05T22:28:01.856Z",
+    "updatedAt": "2026-10-05T22:28:01.856Z"
+  },
+  {
+    "id": "cat_veiculos",
+    "name": "Veículos & Transporte",
+    "icon": "car",
+    "color": "#8B5CF6",
+    "isSystem": true,
+    "createdAt": "2026-10-05T22:28:01.859Z",
+    "updatedAt": "2026-10-05T22:28:01.859Z"
+  },
+  {
+    "id": "cat_documentos",
+    "name": "Documentos & Contratos",
+    "icon": "file-text",
+    "color": "#06B6D4",
+    "isSystem": true,
+    "createdAt": "2026-10-05T22:28:01.861Z",
+    "updatedAt": "2026-10-05T22:28:01.861Z"
+  },
+  {
+    "id": "cat_geral",
+    "name": "Geral & Diversos",
+    "icon": "tag",
+    "color": "#6B7280",
+    "isSystem": true,
+    "createdAt": "2026-10-05T22:28:01.864Z",
+    "updatedAt": "2026-10-05T22:28:01.864Z"
+  }
+]

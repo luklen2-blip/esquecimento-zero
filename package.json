@@ -1,0 +1,26 @@
+{
+  "name": "esquecimento-zero",
+  "version": "1.0.0",
+  "description": "Sistema inteligente para controle de vencimentos, prazos, garantias e documentos",
+  "main": "server/server.js",
+  "type": "module",
+  "scripts": {
+    "start": "node server/server.js",
+    "dev": "node --watch server/server.js",
+    "test": "node tests/run_all.js",
+    "seed": "node server/database/seed.js"
+  },
+  "dependencies": {
+    "express": "^4.22.3",
+    "multer": "^2.4.0"
+  },
+  "keywords": [
+    "produtividade",
+    "garantias",
+    "vencimentos",
+    "documentos",
+    "saas"
+  ],
+  "author": "Luciano",
+  "license": "ISC"
+}

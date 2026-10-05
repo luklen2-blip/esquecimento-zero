@@ -1,0 +1,11 @@
+node_modules/
+.git/
+*.log
+.system_generated/
+scratch/
+.env
+database/data/*.tmp
+cloudflared.exe
+ca-bundle.crt
+tunnel_url.txt
+.deploy_staging/

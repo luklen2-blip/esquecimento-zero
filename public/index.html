@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="h-full bg-slate-50 text-slate-800">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>Esquecimento Zero - Prazos, Garantias e Documentos sob Controle</title>
+  <meta name="description" content="Nunca mais esqueça prazos de garantias, vencimentos de notas fiscais, alimentos ou tarefas importantes.">
+  <meta name="theme-color" content="#2563eb">
+  
+  <!-- Desativação ativa de Service Workers ou caches antigos de outros projetos -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.getRegistrations().then(function(registrations) {
+        for (let r of registrations) {
+          r.unregister();
+          console.log('[CacheReset] Service Worker antigo desregistrado.');
+        }
+      });
+    }
+    if ('caches' in window) {
+      caches.keys().then(function(names) {
+        for (let name of names) {
+          caches.delete(name);
+          console.log('[CacheReset] Cache antigo limpo:', name);
+        }
+      });
+    }
+  </script>
+  
+  <!-- Tailwind CSS & Lucide Icons via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#eff6ff',
+              100: '#dbeafe',
+              500: '#3b82f6',
+              600: '#2563eb',
+              700: '#1d4ed8',
+              800: '#1e40af',
+              900: '#1e3a8a'
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+  </style>
+</head>
+<body class="h-full flex flex-col antialiased selection:bg-brand-500 selection:text-white">
+
+  <!-- Cabeçalho Superior / Desktop & Mobile Navbar -->
+  <header id="main-header" class="sticky top-0 z-40 bg-white/95 backdrop-blur border-b border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <!-- Logotipo & Slogan -->
+      <a href="/dashboard" class="flex items-center gap-2.5 group">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-brand-600 to-indigo-500 flex items-center justify-center text-white shadow-md shadow-brand-500/20 group-hover:scale-105 transition-transform">
+          <i data-lucide="shield-check" class="w-5 h-5"></i>
+        </div>
+        <div>
+          <span class="text-lg font-extrabold tracking-tight text-slate-900 flex items-center gap-1.5">
+            Esquecimento<span class="text-brand-600">Zero</span>
+          </span>
+          <p class="text-[10px] text-slate-500 font-medium hidden sm:block -mt-1">Prazos e garantias sob controle</p>
+        </div>
+      </a>
+
+      <!-- Menu Central Desktop (Apenas se logado) -->
+      <nav id="desktop-nav" class="hidden md:flex items-center gap-1">
+        <a href="/dashboard" data-route="/dashboard" class="nav-link px-3.5 py-2 text-sm font-semibold rounded-lg text-slate-700 hover:text-brand-600 hover:bg-slate-50 transition-colors flex items-center gap-2">
+          <i data-lucide="layout-dashboard" class="w-4 h-4"></i> Dashboard
+        </a>
+        <a href="/calendario" data-route="/calendario" class="nav-link px-3.5 py-2 text-sm font-medium rounded-lg text-slate-600 hover:text-brand-600 hover:bg-slate-50 transition-colors flex items-center gap-2">
+          <i data-lucide="calendar" class="w-4 h-4"></i> Calendário
+        </a>
+        <a href="/lembretes" data-route="/lembretes" class="nav-link px-3.5 py-2 text-sm font-medium rounded-lg text-slate-600 hover:text-brand-600 hover:bg-slate-50 transition-colors flex items-center gap-2">
+          <i data-lucide="bell" class="w-4 h-4"></i> Lembretes
+        </a>
+        <a href="/historico" data-route="/historico" class="nav-link px-3.5 py-2 text-sm font-medium rounded-lg text-slate-600 hover:text-brand-600 hover:bg-slate-50 transition-colors flex items-center gap-2">
+          <i data-lucide="archive" class="w-4 h-4"></i> Histórico
+        </a>
+        <a href="/planos" data-route="/planos" class="nav-link px-3.5 py-2 text-sm font-semibold text-amber-600 hover:bg-amber-50 rounded-lg transition-colors flex items-center gap-1.5">
+          <i data-lucide="sparkles" class="w-4 h-4 text-amber-500"></i> Planos
+        </a>
+      </nav>
+
+      <!-- Ações do Usuário à Direita -->
+      <div id="user-nav-actions" class="flex items-center gap-3">
+        <!-- Renderizado dinamicamente pelo JS (Login/Cadastro ou Perfil/Logout) -->
+      </div>
+    </div>
+  </header>
+
+  <!-- Container Principal das Telas (SPA Root) -->
+  <main id="app-root" class="flex-1 pb-20 md:pb-8">
+    <!-- Conteúdo injetado via router.js -->
+    <div class="flex items-center justify-center min-h-[50vh]">
+      <div class="flex flex-col items-center gap-3 text-slate-400">
+        <i data-lucide="loader-2" class="w-8 h-8 animate-spin text-brand-600"></i>
+        <p class="text-sm font-medium">Carregando Esquecimento Zero...</p>
+      </div>
+    </div>
+  </main>
+
+  <!-- Rodapé Institucional e Legal (LGPD, Isenção Ética) -->
+  <footer class="bg-white border-t border-slate-200 py-6 text-center text-xs text-slate-500">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-2">
+      <div class="flex flex-wrap justify-center items-center gap-4 text-slate-600 font-medium">
+        <a href="/termos" class="hover:text-brand-600 transition-colors">Termos de Uso</a>
+        <span>•</span>
+        <a href="/privacidade" class="hover:text-brand-600 transition-colors">Política de Privacidade (LGPD)</a>
+        <span>•</span>
+        <a href="/planos" class="hover:text-brand-600 transition-colors">Planos & Assinatura</a>
+        <span>•</span>
+        <span class="inline-flex items-center gap-1 text-slate-400">
+          <i data-lucide="lock" class="w-3 h-3"></i> Conexão Segura
+        </span>
+      </div>
+      <p class="text-slate-400 text-[11px] max-w-2xl mx-auto">
+        Aviso Ético e Legal: O <strong>Esquecimento Zero</strong> é uma plataforma de organização e produtividade pessoal. Não substitui orientações médicas, farmacêuticas ou jurídicas profissionais. Recomendado para maiores de 13 anos. Compras e assinaturas reservadas a maiores de 18 anos ou assistidos por responsáveis legais.
+      </p>
+      <p class="text-slate-400 text-[11px]">
+        © 2026 Esquecimento Zero. Todos os direitos reservados.
+      </p>
+    </div>
+  </footer>
+
+  <!-- Barra de Navegação Inferior para Celulares (Mobile App Feel) -->
+  <nav id="mobile-bottom-bar" class="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white border-t border-slate-200 px-2 py-1.5 flex justify-around items-center shadow-lg">
+    <a href="/dashboard" data-route="/dashboard" class="mobile-nav-link flex flex-col items-center py-1 px-3 text-slate-500 hover:text-brand-600 rounded-lg">
+      <i data-lucide="layout-dashboard" class="w-5 h-5"></i>
+      <span class="text-[10px] font-semibold mt-0.5">Início</span>
+    </a>
+    <a href="/calendario" data-route="/calendario" class="mobile-nav-link flex flex-col items-center py-1 px-3 text-slate-500 hover:text-brand-600 rounded-lg">
+      <i data-lucide="calendar" class="w-5 h-5"></i>
+      <span class="text-[10px] font-medium mt-0.5">Calendário</span>
+    </a>
+    <a href="/adicionar" data-route="/adicionar" class="flex flex-col items-center -mt-5">
+      <div class="w-12 h-12 rounded-full bg-brand-600 text-white flex items-center justify-center shadow-lg shadow-brand-500/40 hover:bg-brand-700 transition-colors">
+        <i data-lucide="plus" class="w-6 h-6"></i>
+      </div>
+      <span class="text-[10px] font-semibold text-brand-700 mt-1">Novo</span>
+    </a>
+    <a href="/lembretes" data-route="/lembretes" class="mobile-nav-link flex flex-col items-center py-1 px-3 text-slate-500 hover:text-brand-600 rounded-lg">
+      <i data-lucide="bell" class="w-5 h-5"></i>
+      <span class="text-[10px] font-medium mt-0.5">Alertas</span>
+    </a>
+    <a href="/perfil" data-route="/perfil" class="mobile-nav-link flex flex-col items-center py-1 px-3 text-slate-500 hover:text-brand-600 rounded-lg">
+      <i data-lucide="user" class="w-5 h-5"></i>
+      <span class="text-[10px] font-medium mt-0.5">Perfil</span>
+    </a>
+  </nav>
+
+  <!-- Container de Toasts Flutuantes -->
+  <div id="toast-container" class="fixed top-20 right-4 z-50 flex flex-col gap-2 max-w-sm pointer-events-none"></div>
+
+  <!-- Scripts da Aplicação SPA -->
+  <script type="module" src="/js/api.js"></script>
+  <script type="module" src="/js/router.js"></script>
+  <script type="module" src="/js/app.js"></script>
+</body>
+</html>

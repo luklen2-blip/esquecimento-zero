@@ -1,0 +1,62 @@
+[
+  {
+    "id": "doc_demo_nf_samsung",
+    "userId": "usr_demo_esquecimento",
+    "fileName": "Nota_Fiscal_Samsung_Crystal_UHD.pdf",
+    "fileType": "application/pdf",
+    "fileSize": 358400,
+    "filePath": "/uploads/demo_nf_samsung.pdf",
+    "ocrRawText": "DANFE NOTA FISCAL ELETRONICA MAGAZINE LUIZA SMART TV SAMSUNG 55 4K NF 49281",
+    "status": "processed",
+    "createdAt": "2026-10-05T22:28:02.022Z",
+    "updatedAt": "2026-10-05T22:28:02.022Z"
+  },
+  {
+    "userId": "use_1791239698320_jd0px",
+    "fileName": "NotaFiscal_Teste.pdf",
+    "fileType": "application/pdf",
+    "fileSize": 47,
+    "filePath": "/uploads/1791239698386_jrpgu_NotaFiscal_Teste.pdf",
+    "status": "processed",
+    "ocrRawText": null,
+    "id": "doc_1791239698416_irn8f",
+    "createdAt": "2026-10-05T22:34:58.416Z",
+    "updatedAt": "2026-10-05T22:34:58.425Z"
+  },
+  {
+    "userId": "use_1791239906225_x2w7v",
+    "fileName": "NotaFiscal_Teste.pdf",
+    "fileType": "application/pdf",
+    "fileSize": 47,
+    "filePath": "/uploads/1791239906243_rnbli_NotaFiscal_Teste.pdf",
+    "status": "processed",
+    "ocrRawText": "[OCR PROCESSADO] DANFE NOTA FISCAL ELETRONICA\nEMITENTE: Estabelecimento Comercial\nDESTINATARIO: CONSUMIDOR FINAL\nITEM: Fiscal Teste\nVALOR TOTAL: R$ 199.90\nGARANTIA ESTIMADA: 12 MESES",
+    "id": "doc_1791239906255_wqovs",
+    "createdAt": "2026-10-05T22:38:26.255Z",
+    "updatedAt": "2026-10-05T22:38:26.332Z"
+  },
+  {
+    "userId": "use_1791240241985_rqx07",
+    "fileName": "NotaFiscal_Teste.pdf",
+    "fileType": "application/pdf",
+    "fileSize": 47,
+    "filePath": "/uploads/1791240242004_zensv_NotaFiscal_Teste.pdf",
+    "status": "processed",
+    "ocrRawText": "[OCR PROCESSADO] DANFE NOTA FISCAL ELETRONICA\nEMITENTE: Estabelecimento Comercial\nDESTINATARIO: CONSUMIDOR FINAL\nITEM: Fiscal Teste\nVALOR TOTAL: R$ 199.90\nGARANTIA ESTIMADA: 12 MESES",
+    "id": "doc_1791240242103_f1brj",
+    "createdAt": "2026-10-05T22:44:02.103Z",
+    "updatedAt": "2026-10-05T22:44:02.155Z"
+  },
+  {
+    "userId": "use_1791241253883_85bdi",
+    "fileName": "NotaFiscal_Teste.pdf",
+    "fileType": "application/pdf",
+    "fileSize": 47,
+    "filePath": "/uploads/1791241253903_a15wo_NotaFiscal_Teste.pdf",
+    "status": "processed",
+    "ocrRawText": "[OCR PROCESSADO] DANFE NOTA FISCAL ELETRONICA\nEMITENTE: Estabelecimento Comercial\nDESTINATARIO: CONSUMIDOR FINAL\nITEM: Fiscal Teste\nVALOR TOTAL: R$ 199.90\nGARANTIA ESTIMADA: 12 MESES",
+    "id": "doc_1791241253908_fmoim",
+    "createdAt": "2026-10-05T23:00:53.908Z",
+    "updatedAt": "2026-10-05T23:00:53.945Z"
+  }
+]

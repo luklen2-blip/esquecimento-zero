@@ -1,0 +1,72 @@
+[
+  {
+    "id": "usr_demo_esquecimento",
+    "name": "Luciano Antigravity (Demonstração)",
+    "email": "demo@esquecimentozero.com.br",
+    "passwordHash": "5fe7289105881d44679beda32e44fe90:9aaa2801cd03e6f47dbf9ebd4c849ca67b79c3a4a5850e8e4dc03caa3c0689055d3aa2f757a2414be292b7330896f9fd785acbc5c63355034f8368b22c48e1bd",
+    "role": "user",
+    "termsAcceptedAt": "2026-10-05T22:28:02.015Z",
+    "createdAt": "2026-10-05T22:28:02.015Z",
+    "updatedAt": "2026-10-05T22:28:02.015Z"
+  },
+  {
+    "name": "Novo Usuário Teste",
+    "email": "teste_1791239299073@esquecimentozero.com.br",
+    "passwordHash": "3f9daae31790803f9b92edf592357158:48558a345f95b9051f052a2ce22d2ccb1fb044dc12b80c6512a9e5d206ba636ef5a71060838d8c4731967c53ec271025fdd529e9893c2343a0e28f4e98ca5bae",
+    "role": "user",
+    "termsAcceptedAt": "2026-10-05T22:28:19.128Z",
+    "id": "use_1791239299129_3q33c",
+    "createdAt": "2026-10-05T22:28:19.129Z",
+    "updatedAt": "2026-10-05T22:28:19.129Z"
+  },
+  {
+    "name": "Novo Usuário Teste",
+    "email": "teste_1791239331301@esquecimentozero.com.br",
+    "passwordHash": "d9d164a0795abf000660671223e5447c:f77f9ed78b174066bfcf9b804ca06c219f988d5b1979c07843200a40e70320ccc5c8d73b0b5bd69e03eefaaf0cdd3a71861dd9e1dbc89a91ee13ec7973247365",
+    "role": "user",
+    "termsAcceptedAt": "2026-10-05T22:28:51.389Z",
+    "id": "use_1791239331389_g91t4",
+    "createdAt": "2026-10-05T22:28:51.389Z",
+    "updatedAt": "2026-10-05T22:28:51.389Z"
+  },
+  {
+    "name": "Novo Usuário Teste",
+    "email": "teste_1791239698268@esquecimentozero.com.br",
+    "passwordHash": "2835673389d59045bcc6af30ae7f1e1f:9f30a03450b4ab0e0e339d42953237a353b99fd6a772e622c80f9c77563c90cfdf178cbbcc86aaade5f4dd737f4e72a228ddeff57f2a9eed6b28f189550270e9",
+    "role": "user",
+    "termsAcceptedAt": "2026-10-05T22:34:58.320Z",
+    "id": "use_1791239698320_jd0px",
+    "createdAt": "2026-10-05T22:34:58.320Z",
+    "updatedAt": "2026-10-05T22:34:58.320Z"
+  },
+  {
+    "name": "Novo Usuário Teste",
+    "email": "teste_1791239906146@esquecimentozero.com.br",
+    "passwordHash": "094b471442f2ada66d063e2b8ce3eb7f:bf4043d0cda12518dea88f7bb0f23e35c2264dbcadd189de5cb4e912f474a4a2c59b9bf53183daad7603531785b0bc6f5e7620cfb3ff4aeff0a8e2c28f33dede",
+    "role": "user",
+    "termsAcceptedAt": "2026-10-05T22:38:26.225Z",
+    "id": "use_1791239906225_x2w7v",
+    "createdAt": "2026-10-05T22:38:26.225Z",
+    "updatedAt": "2026-10-05T22:38:26.225Z"
+  },
+  {
+    "name": "Novo Usuário Teste",
+    "email": "teste_1791240241921@esquecimentozero.com.br",
+    "passwordHash": "cbbfec6c2824325f8db225c624d58fb3:1e47a7c16413789a2838ad7a02eedad1ba462b1456d627a6120b08dd88e6717bdb1d6ac106d7d35c4c87d07408e94cd7e65a2556411455a2d3543000a3c5a194",
+    "role": "user",
+    "termsAcceptedAt": "2026-10-05T22:44:01.985Z",
+    "id": "use_1791240241985_rqx07",
+    "createdAt": "2026-10-05T22:44:01.985Z",
+    "updatedAt": "2026-10-05T22:44:01.985Z"
+  },
+  {
+    "name": "Novo Usuário Teste",
+    "email": "teste_1791241253834@esquecimentozero.com.br",
+    "passwordHash": "58180854482f939cce7e220a2c274ad2:efb1b1f7ca1a27080da3128d5ecfe75f3a0a049241da2832e986ff261469ac3d23425a6c65f2e29183b55e4822bf5467c6b8602738e776819b5b25f07dc58e12",
+    "role": "user",
+    "termsAcceptedAt": "2026-10-05T23:00:53.883Z",
+    "id": "use_1791241253883_85bdi",
+    "createdAt": "2026-10-05T23:00:53.883Z",
+    "updatedAt": "2026-10-05T23:00:53.883Z"
+  }
+]

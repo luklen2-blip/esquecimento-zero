@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: esquecimento-zero
+    runtime: node
+    plan: free
+    region: oregon
+    buildCommand: npm install && node tests/run_all.js
+    startCommand: node server/server.js
+    healthCheckPath: /api/health
+    autoDeploy: true
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: APP_NAME
+        value: "Esquecimento Zero"
+      - key: PORT
+        value: 3000
