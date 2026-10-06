@@ -1,5 +1,7 @@
 import { Users, Subscriptions, Items } from '../database/db.js';
 import { hashPassword, verifyPassword, signJwt } from '../utils/authUtils.js';
+import { COMMERCIAL_CONFIG } from '../config/commercial.js';
+import { getAccessStatus } from '../utils/accessControl.js';
 
 export const authController = {
   /**
@@ -57,12 +59,17 @@ export const authController = {
         termsAcceptedAt: new Date().toISOString()
       });
 
-      // Cria assinatura padrão do Plano Gratuito
+      // Cria assinatura padrão com Período de Teste Gratuito de 7 Dias
+      const now = new Date();
+      const trialEnds = new Date(now.getTime() + (COMMERCIAL_CONFIG.TRIAL_DAYS * 24 * 60 * 60 * 1000));
+
       const subscription = await Subscriptions.insert({
         userId: newUser.id,
         plan: 'free',
         status: 'active',
         itemsLimit: 10,
+        trialStartedAt: now.toISOString(),
+        trialEndsAt: trialEnds.toISOString(),
         features: {
           aiProcessing: false,
           unlimitedItems: false,
@@ -72,6 +79,7 @@ export const authController = {
       });
 
       const token = signJwt({ userId: newUser.id });
+      const accessStatus = getAccessStatus(subscription, newUser);
 
       return res.status(201).json({
         success: true,
@@ -86,7 +94,15 @@ export const authController = {
           subscription: {
             plan: subscription.plan,
             itemsLimit: subscription.itemsLimit,
-            status: subscription.status
+            status: subscription.status,
+            trialStartedAt: subscription.trialStartedAt,
+            trialEndsAt: subscription.trialEndsAt,
+            lifetimeActivatedAt: subscription.lifetimeActivatedAt
+          },
+          access: accessStatus,
+          commercial: {
+            checkoutUrl: COMMERCIAL_CONFIG.LIFETIME_CHECKOUT_URL,
+            priceBrl: COMMERCIAL_CONFIG.LIFETIME_PRICE_BRL
           }
         },
         timestamp: new Date().toISOString()
@@ -126,16 +142,21 @@ export const authController = {
 
       let subscription = await Subscriptions.findOne(s => s.userId === user.id);
       if (!subscription) {
+        const now = new Date();
+        const trialEnds = new Date(now.getTime() + (COMMERCIAL_CONFIG.TRIAL_DAYS * 24 * 60 * 60 * 1000));
         subscription = await Subscriptions.insert({
           userId: user.id,
           plan: 'free',
           status: 'active',
           itemsLimit: 10,
+          trialStartedAt: now.toISOString(),
+          trialEndsAt: trialEnds.toISOString(),
           features: { aiProcessing: false, unlimitedItems: false }
         });
       }
 
       const token = signJwt({ userId: user.id });
+      const accessStatus = getAccessStatus(subscription, user);
 
       return res.status(200).json({
         success: true,
@@ -150,7 +171,15 @@ export const authController = {
           subscription: {
             plan: subscription.plan,
             itemsLimit: subscription.itemsLimit,
-            status: subscription.status
+            status: subscription.status,
+            trialStartedAt: subscription.trialStartedAt,
+            trialEndsAt: subscription.trialEndsAt,
+            lifetimeActivatedAt: subscription.lifetimeActivatedAt
+          },
+          access: accessStatus,
+          commercial: {
+            checkoutUrl: COMMERCIAL_CONFIG.LIFETIME_CHECKOUT_URL,
+            priceBrl: COMMERCIAL_CONFIG.LIFETIME_PRICE_BRL
           }
         },
         timestamp: new Date().toISOString()
@@ -179,16 +208,21 @@ export const authController = {
 
       let subscription = await Subscriptions.findOne(s => s.userId === user.id);
       if (!subscription) {
+        const now = new Date();
+        const trialEnds = new Date(now.getTime() + (COMMERCIAL_CONFIG.TRIAL_DAYS * 24 * 60 * 60 * 1000));
         subscription = await Subscriptions.insert({
           userId: user.id,
           plan: 'free',
           status: 'active',
           itemsLimit: 10,
+          trialStartedAt: now.toISOString(),
+          trialEndsAt: trialEnds.toISOString(),
           features: { aiProcessing: false, unlimitedItems: false }
         });
       }
 
       const itemsCount = await Items.count(i => i.userId === user.id);
+      const accessStatus = getAccessStatus(subscription, user);
 
       return res.status(200).json({
         success: true,
@@ -204,7 +238,15 @@ export const authController = {
             plan: subscription.plan,
             itemsLimit: subscription.itemsLimit,
             status: subscription.status,
-            features: subscription.features
+            features: subscription.features,
+            trialStartedAt: subscription.trialStartedAt,
+            trialEndsAt: subscription.trialEndsAt,
+            lifetimeActivatedAt: subscription.lifetimeActivatedAt
+          },
+          access: accessStatus,
+          commercial: {
+            checkoutUrl: COMMERCIAL_CONFIG.LIFETIME_CHECKOUT_URL,
+            priceBrl: COMMERCIAL_CONFIG.LIFETIME_PRICE_BRL
           },
           usage: {
             itemsCount,

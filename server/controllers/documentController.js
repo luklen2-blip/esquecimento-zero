@@ -1,5 +1,6 @@
-import { Documents } from '../database/db.js';
+import { Documents, Subscriptions, Users } from '../database/db.js';
 import { ocrService } from '../services/ocrService.js';
+import { getAccessStatus } from '../utils/accessControl.js';
 
 export const documentController = {
   /**
@@ -47,6 +48,22 @@ export const documentController = {
    */
   async processDocument(req, res) {
     try {
+      const subscription = await Subscriptions.findOne(s => s.userId === req.userId);
+      const user = await Users.findById(req.userId);
+      const access = getAccessStatus(subscription, user);
+
+      if (!access.hasAccess) {
+        return res.status(403).json({
+          success: false,
+          error: {
+            code: 'TRIAL_EXPIRED',
+            message: 'Seu período de teste de 7 dias expirou. Adquira o Acesso Vitalício por apenas R$ 19,90 para processar documentos com IA.',
+            checkoutUrl: access.checkoutUrl,
+            priceBrl: access.priceBrl
+          }
+        });
+      }
+
       const doc = await Documents.findById(req.params.id);
       if (!doc || doc.userId !== req.userId) {
         return res.status(404).json({

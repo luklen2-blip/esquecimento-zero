@@ -59,17 +59,99 @@ function renderDashboardContent(container, data, user) {
     return isoString;
   };
 
+  const access = data.access || {};
+  const isLifetime = access.isLifetime || metrics.plan === 'lifetime';
+  const isExpired = access.isExpired;
+  const isTrial = access.isTrial || !isLifetime;
+  const daysRemaining = access.daysRemaining ?? metrics.trialDaysRemaining ?? 7;
+  const checkoutUrl = access.checkoutUrl || metrics.checkoutUrl || 'https://pay.kiwify.com.br/cd5quHM';
+
+  let commercialBannerHtml = '';
+
+  if (isLifetime) {
+    commercialBannerHtml = `
+      <div class="bg-gradient-to-r from-emerald-950 via-slate-900 to-teal-950 text-white rounded-2xl p-4 sm:p-5 shadow-sm border border-emerald-500/30 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold text-lg">
+            👑
+          </div>
+          <div>
+            <div class="flex items-center gap-2">
+              <h3 class="text-sm font-extrabold text-white">Acesso Vitalício Ativo</h3>
+              <span class="px-2 py-0.5 rounded-full text-[10px] font-black bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">LIFETIME</span>
+            </div>
+            <p class="text-xs text-slate-300 mt-0.5">Você possui armazenamento e leitura de notas fiscais com IA ilimitados sem qualquer mensalidade.</p>
+          </div>
+        </div>
+      </div>
+    `;
+  } else if (isExpired) {
+    commercialBannerHtml = `
+      <div class="bg-gradient-to-r from-rose-950 via-slate-900 to-rose-900 text-white rounded-2xl p-5 sm:p-6 shadow-xl border-2 border-rose-500/50 flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div class="flex items-start gap-3.5">
+          <div class="w-11 h-11 rounded-2xl bg-rose-500/20 text-rose-400 flex items-center justify-center flex-shrink-0">
+            <i data-lucide="lock" class="w-6 h-6"></i>
+          </div>
+          <div>
+            <div class="flex items-center gap-2">
+              <h3 class="text-base font-black text-white">Seu Teste Gratuito de 7 Dias Expirou</h3>
+              <span class="px-2 py-0.5 rounded-full text-[10px] font-black bg-rose-500/30 text-rose-300 uppercase">Acesso Pausado</span>
+            </div>
+            <p class="text-xs sm:text-sm text-slate-300 mt-1 max-w-xl">
+              Todos os seus registros e documentos continuam salvos com segurança. Para continuar cadastrando itens e usando a IA, ative seu <strong>Acesso Vitalício por R$ 19,90 (pagamento único)</strong>.
+            </p>
+          </div>
+        </div>
+        <a href="${checkoutUrl}" target="_blank" rel="noopener noreferrer"
+          class="px-5 py-3 bg-gradient-to-r from-amber-400 to-orange-400 hover:from-amber-300 hover:to-orange-300 text-slate-950 font-black text-xs sm:text-sm rounded-xl shadow-lg shadow-amber-400/20 flex items-center justify-center gap-2 flex-shrink-0 transition-transform hover:scale-105">
+          <i data-lucide="zap" class="w-4 h-4"></i>
+          <span>Ativar Vitalício (R$ 19,90)</span>
+        </a>
+      </div>
+    `;
+  } else if (isTrial) {
+    const isUrgent = daysRemaining <= 3;
+    commercialBannerHtml = `
+      <div class="${isUrgent ? 'bg-gradient-to-r from-amber-950 via-slate-900 to-orange-950 border-amber-500/50' : 'bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 border-indigo-500/30'} text-white rounded-2xl p-4 sm:p-5 shadow-sm border flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-xl ${isUrgent ? 'bg-amber-500/20 text-amber-400' : 'bg-brand-500/20 text-brand-400'} flex items-center justify-center flex-shrink-0">
+            <i data-lucide="${isUrgent ? 'clock' : 'sparkles'}" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="text-xs sm:text-sm font-extrabold">${isUrgent ? '⚠️ Período de Teste Quase no Fim' : 'Período de Teste Gratuito'}</span>
+              <span class="px-2 py-0.5 rounded-full text-[10px] font-bold ${isUrgent ? 'bg-amber-400/20 text-amber-300' : 'bg-brand-400/20 text-brand-300'}">
+                ${daysRemaining === 0 ? 'Último dia hoje' : `Resta${daysRemaining === 1 ? '' : 'm'} ${daysRemaining} dia${daysRemaining === 1 ? '' : 's'}`}
+              </span>
+            </div>
+            <p class="text-xs text-slate-300 mt-0.5">
+              Garanta seu Acesso Vitalício permanente por apenas <strong>R$ 19,90 (pagamento único)</strong> sem mensalidades.
+            </p>
+          </div>
+        </div>
+        <a href="${checkoutUrl}" target="_blank" rel="noopener noreferrer"
+          class="px-4 py-2.5 ${isUrgent ? 'bg-amber-400 hover:bg-amber-300 text-slate-950 font-black' : 'bg-white/10 hover:bg-white/20 text-white font-bold'} text-xs rounded-xl flex items-center justify-center gap-1.5 transition-all flex-shrink-0">
+          <span>Garantir Vitalício por R$ 19,90</span>
+          <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+        </a>
+      </div>
+    `;
+  }
+
   container.innerHTML = `
+    <!-- Banner Comercial de Status -->
+    ${commercialBannerHtml}
+
     <!-- 1. Cabeçalho de Boas-Vindas e Ação Rápida -->
     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 bg-white p-5 sm:p-6 rounded-2xl border border-slate-200/80 shadow-sm">
       <div>
         <div class="flex items-center gap-2">
           <h1 class="text-xl sm:text-2xl font-black text-slate-900">Olá, ${user.name.split(' ')[0]}!</h1>
           <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-bold ${
-            isFreePlan ? 'bg-slate-100 text-slate-700 border border-slate-200' : 'bg-amber-100 text-amber-800 border border-amber-300'
+            isLifetime ? 'bg-emerald-100 text-emerald-800 border border-emerald-300' : isExpired ? 'bg-rose-100 text-rose-800 border border-rose-300' : 'bg-amber-100 text-amber-800 border border-amber-300'
           }">
-            <i data-lucide="${isFreePlan ? 'user' : 'crown'}" class="w-3 h-3"></i>
-            ${isFreePlan ? 'Plano Gratuito' : 'Plano Premium'}
+            <i data-lucide="${isLifetime ? 'crown' : isExpired ? 'lock' : 'sparkles'}" class="w-3 h-3"></i>
+            ${isLifetime ? 'Acesso Vitalício' : isExpired ? 'Teste Expirado' : `Teste (${daysRemaining}d)`}
           </span>
         </div>
         <p class="text-xs sm:text-sm text-slate-500 mt-1">
@@ -78,7 +160,9 @@ function renderDashboardContent(container, data, user) {
       </div>
 
       <div class="flex items-center gap-2.5">
-        <a href="/adicionar" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-brand-600 hover:bg-brand-700 text-white text-sm font-semibold rounded-xl shadow-md shadow-brand-500/20 transition-all hover:scale-[1.02] active:scale-[0.98]">
+        <a href="/adicionar" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-2.5 ${
+          isExpired ? 'bg-slate-400 cursor-not-allowed' : 'bg-brand-600 hover:bg-brand-700'
+        } text-white text-sm font-semibold rounded-xl shadow-md transition-all hover:scale-[1.02] active:scale-[0.98]">
           <i data-lucide="plus-circle" class="w-4 h-4"></i>
           <span>Novo Item</span>
         </a>

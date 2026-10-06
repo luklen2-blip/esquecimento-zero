@@ -5,8 +5,8 @@
     "icon": "laptop",
     "color": "#3B82F6",
     "isSystem": true,
-    "createdAt": "2026-10-05T22:28:01.846Z",
-    "updatedAt": "2026-10-05T22:28:01.847Z"
+    "createdAt": "2026-10-06T01:24:42.202Z",
+    "updatedAt": "2026-10-06T01:24:42.205Z"
   },
   {
     "id": "cat_eletrodomesticos",
@@ -14,8 +14,8 @@
     "icon": "home",
     "color": "#10B981",
     "isSystem": true,
-    "createdAt": "2026-10-05T22:28:01.851Z",
-    "updatedAt": "2026-10-05T22:28:01.851Z"
+    "createdAt": "2026-10-06T01:24:42.211Z",
+    "updatedAt": "2026-10-06T01:24:42.211Z"
   },
   {
     "id": "cat_alimentos",
@@ -23,8 +23,8 @@
     "icon": "apple",
     "color": "#F59E0B",
     "isSystem": true,
-    "createdAt": "2026-10-05T22:28:01.854Z",
-    "updatedAt": "2026-10-05T22:28:01.854Z"
+    "createdAt": "2026-10-06T01:24:42.214Z",
+    "updatedAt": "2026-10-06T01:24:42.214Z"
   },
   {
     "id": "cat_saude",
@@ -32,8 +32,8 @@
     "icon": "pill",
     "color": "#EF4444",
     "isSystem": true,
-    "createdAt": "2026-10-05T22:28:01.856Z",
-    "updatedAt": "2026-10-05T22:28:01.856Z"
+    "createdAt": "2026-10-06T01:24:42.218Z",
+    "updatedAt": "2026-10-06T01:24:42.218Z"
   },
   {
     "id": "cat_veiculos",
@@ -41,8 +41,8 @@
     "icon": "car",
     "color": "#8B5CF6",
     "isSystem": true,
-    "createdAt": "2026-10-05T22:28:01.859Z",
-    "updatedAt": "2026-10-05T22:28:01.859Z"
+    "createdAt": "2026-10-06T01:24:42.221Z",
+    "updatedAt": "2026-10-06T01:24:42.221Z"
   },
   {
     "id": "cat_documentos",
@@ -50,8 +50,8 @@
     "icon": "file-text",
     "color": "#06B6D4",
     "isSystem": true,
-    "createdAt": "2026-10-05T22:28:01.861Z",
-    "updatedAt": "2026-10-05T22:28:01.861Z"
+    "createdAt": "2026-10-06T01:24:42.232Z",
+    "updatedAt": "2026-10-06T01:24:42.233Z"
   },
   {
     "id": "cat_geral",
@@ -59,7 +59,7 @@
     "icon": "tag",
     "color": "#6B7280",
     "isSystem": true,
-    "createdAt": "2026-10-05T22:28:01.864Z",
-    "updatedAt": "2026-10-05T22:28:01.864Z"
+    "createdAt": "2026-10-06T01:24:42.239Z",
+    "updatedAt": "2026-10-06T01:24:42.239Z"
   }
 ]

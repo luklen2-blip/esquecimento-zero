@@ -7,8 +7,9 @@
   "scripts": {
     "start": "node server/server.js",
     "dev": "node --watch server/server.js",
-    "test": "node tests/run_all.js",
+    "test": "node tests/run_all.js && node tests/test_commercial_model.js",
     "test:pg": "node tests/test_postgres_lifecycle.js",
+    "test:commercial": "node tests/test_commercial_model.js",
     "seed": "node server/database/seed.js",
     "migrate": "node scripts/migrate_json_to_postgres.js",
     "backup": "node scripts/backup_jsondb.js"

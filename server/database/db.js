@@ -8,7 +8,8 @@ import {
   PgSubscriptions,
   PgDocuments,
   PgItems,
-  PgReminders
+  PgReminders,
+  PgPaymentTransactions
 } from './postgres.js';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -117,6 +118,7 @@ const jsonItems = new JsonDB('items');
 const jsonReminders = new JsonDB('reminders');
 const jsonCategories = new JsonDB('categories');
 const jsonSubscriptions = new JsonDB('subscriptions');
+const jsonPaymentTransactions = new JsonDB('payment_transactions');
 
 // ===================================================================
 // CAMADA UNIFICADA DE ACESSO A DADOS (DAL - REPOSITÓRIO ADAPTATIVO)
@@ -191,9 +193,61 @@ export const Subscriptions = {
     if (isPostgresConfigured()) return await PgSubscriptions.insert(doc);
     return jsonSubscriptions.insert(doc);
   },
+  async updateByUserId(userId, updates) {
+    if (isPostgresConfigured()) return await PgSubscriptions.updateByUserId(userId, updates);
+    const sub = jsonSubscriptions.findOne(s => s.userId === userId);
+    if (!sub) return null;
+    return jsonSubscriptions.update(sub.id, updates);
+  },
+  async upgradeToLifetime(userId, { paymentId, paymentProvider = 'kiwify' } = {}) {
+    if (isPostgresConfigured()) return await PgSubscriptions.upgradeToLifetime(userId, { paymentId, paymentProvider });
+    const sub = jsonSubscriptions.findOne(s => s.userId === userId);
+    const now = new Date().toISOString();
+    const lifetimeData = {
+      plan: 'lifetime',
+      status: 'active',
+      itemsLimit: -1,
+      lifetimeActivatedAt: now,
+      paymentId: paymentId || null,
+      paymentProvider: paymentProvider || 'kiwify',
+      features: {
+        aiProcessing: true,
+        unlimitedItems: true,
+        advancedReminders: true,
+        exportData: true
+      },
+      updatedAt: now
+    };
+    if (!sub) {
+      return jsonSubscriptions.insert({
+        userId,
+        ...lifetimeData
+      });
+    }
+    return jsonSubscriptions.update(sub.id, lifetimeData);
+  },
   async clear() {
     if (isPostgresConfigured()) return await PgSubscriptions.clear();
     return jsonSubscriptions.clear();
+  }
+};
+
+export const PaymentTransactions = {
+  async findByOrderId(orderId) {
+    if (isPostgresConfigured()) return await PgPaymentTransactions.findByOrderId(orderId);
+    return jsonPaymentTransactions.findOne(t => t.orderId === orderId);
+  },
+  async insert(doc) {
+    if (isPostgresConfigured()) return await PgPaymentTransactions.insert(doc);
+    return jsonPaymentTransactions.insert(doc);
+  },
+  async findAll(predicate) {
+    if (isPostgresConfigured()) return await PgPaymentTransactions.findAll(predicate);
+    return jsonPaymentTransactions.findAll(predicate);
+  },
+  async clear() {
+    if (isPostgresConfigured()) return await PgPaymentTransactions.clear();
+    return jsonPaymentTransactions.clear();
   }
 };
 

@@ -55,8 +55,10 @@ export async function runSeed(reset = false) {
     console.log('[Seed] Usuário de demonstração criado:', demoEmail, '(Senha: demo123)');
   }
 
-  // 3. Assinatura do Usuário Demo (Plano Gratuito)
+  // 3. Assinatura do Usuário Demo (Plano Gratuito com 7 Dias de Teste)
   let demoSub = await Subscriptions.findOne(s => s.userId === demoUser.id);
+  const now = new Date();
+  const trialEnds = new Date(now.getTime() + (7 * 24 * 60 * 60 * 1000));
   if (!demoSub) {
     demoSub = await Subscriptions.insert({
       id: 'sub_demo_free',
@@ -64,12 +66,19 @@ export async function runSeed(reset = false) {
       plan: 'free',
       status: 'active',
       itemsLimit: 10,
+      trialStartedAt: now.toISOString(),
+      trialEndsAt: trialEnds.toISOString(),
       features: {
         aiProcessing: false,
         unlimitedItems: false,
         advancedReminders: false,
         exportData: false
       }
+    });
+  } else if (!demoSub.trialEndsAt) {
+    await Subscriptions.updateByUserId(demoUser.id, {
+      trialStartedAt: now.toISOString(),
+      trialEndsAt: trialEnds.toISOString()
     });
   }
 

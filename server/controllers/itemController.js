@@ -1,8 +1,9 @@
-import { Items, Documents, Subscriptions, Reminders, Categories } from '../database/db.js';
+import { Items, Documents, Subscriptions, Reminders, Categories, Users } from '../database/db.js';
+import { getAccessStatus } from '../utils/accessControl.js';
 
 export const itemController = {
   /**
-   * Cadastro de novo item com verificação rigorosa de quota do plano (10 itens no gratuito)
+   * Cadastro de novo item com verificação de período de teste e quota do plano
    */
   async create(req, res) {
     try {
@@ -29,21 +30,36 @@ export const itemController = {
         });
       }
 
-      // Verificação de cota do plano
+      // Verificação de status comercial (Teste Gratuito / Vitalício)
       const subscription = (await Subscriptions.findOne(s => s.userId === userId)) || {
         plan: 'free',
         itemsLimit: 10
       };
+      const user = await Users.findById(userId);
+      const access = getAccessStatus(subscription, user);
 
+      if (!access.hasAccess) {
+        return res.status(403).json({
+          success: false,
+          error: {
+            code: 'TRIAL_EXPIRED',
+            message: 'Seu período de teste de 7 dias expirou. Adquira o Acesso Vitalício por apenas R$ 19,90 para continuar cadastrando registros.',
+            checkoutUrl: access.checkoutUrl,
+            priceBrl: access.priceBrl
+          }
+        });
+      }
+
+      // Verificação de cota do plano
       const currentItemCount = await Items.count(i => i.userId === userId);
-      const isUnlimited = subscription.itemsLimit === -1;
+      const isUnlimited = subscription.itemsLimit === -1 || access.isLifetime;
 
       if (!isUnlimited && currentItemCount >= subscription.itemsLimit) {
         return res.status(403).json({
           success: false,
           error: {
             code: 'PLAN_LIMIT_REACHED',
-            message: `Você atingiu o limite de ${subscription.itemsLimit} itens cadastrados no Plano Gratuito. Evolua para o Plano Premium para cadastrar itens ilimitados!`
+            message: `Você atingiu o limite de ${subscription.itemsLimit} itens cadastrados no período de teste. Adquira o Acesso Vitalício por R$ 19,90 para cadastrar itens ilimitados!`
           }
         });
       }

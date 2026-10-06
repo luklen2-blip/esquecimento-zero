@@ -94,6 +94,31 @@ export function formatSubscription(r) {
     status: r.status,
     itemsLimit: r.items_limit,
     features: features || { aiProcessing: false, unlimitedItems: false },
+    trialStartedAt: r.trial_started_at ? new Date(r.trial_started_at).toISOString() : null,
+    trialEndsAt: r.trial_ends_at ? new Date(r.trial_ends_at).toISOString() : null,
+    lifetimeActivatedAt: r.lifetime_activated_at ? new Date(r.lifetime_activated_at).toISOString() : null,
+    paymentId: r.payment_id || null,
+    paymentProvider: r.payment_provider || null,
+    createdAt: r.created_at ? new Date(r.created_at).toISOString() : null,
+    updatedAt: r.updated_at ? new Date(r.updated_at).toISOString() : null
+  };
+}
+
+export function formatPaymentTransaction(r) {
+  if (!r) return null;
+  let payload = r.payload;
+  if (typeof payload === 'string') {
+    try { payload = JSON.parse(payload); } catch {}
+  }
+  return {
+    id: r.id,
+    orderId: r.order_id,
+    provider: r.provider || 'kiwify',
+    userId: r.user_id || null,
+    customerEmail: r.customer_email,
+    amountCents: r.amount_cents != null ? Number(r.amount_cents) : null,
+    status: r.status,
+    payload: payload || null,
     createdAt: r.created_at ? new Date(r.created_at).toISOString() : null,
     updatedAt: r.updated_at ? new Date(r.updated_at).toISOString() : null
   };
@@ -275,13 +300,22 @@ export const PgSubscriptions = {
     const now = new Date().toISOString();
     const featuresJson = JSON.stringify(s.features || { aiProcessing: false, unlimitedItems: false });
     const query = `
-      INSERT INTO subscriptions (id, user_id, plan, status, items_limit, features, created_at, updated_at)
-      VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+      INSERT INTO subscriptions (
+        id, user_id, plan, status, items_limit, features,
+        trial_started_at, trial_ends_at, lifetime_activated_at, payment_id, payment_provider,
+        created_at, updated_at
+      )
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)
       ON CONFLICT (user_id) DO UPDATE SET
         plan = EXCLUDED.plan,
         status = EXCLUDED.status,
         items_limit = EXCLUDED.items_limit,
         features = EXCLUDED.features,
+        trial_started_at = COALESCE(EXCLUDED.trial_started_at, subscriptions.trial_started_at),
+        trial_ends_at = COALESCE(EXCLUDED.trial_ends_at, subscriptions.trial_ends_at),
+        lifetime_activated_at = COALESCE(EXCLUDED.lifetime_activated_at, subscriptions.lifetime_activated_at),
+        payment_id = COALESCE(EXCLUDED.payment_id, subscriptions.payment_id),
+        payment_provider = COALESCE(EXCLUDED.payment_provider, subscriptions.payment_provider),
         updated_at = EXCLUDED.updated_at
       RETURNING *;
     `;
@@ -290,16 +324,92 @@ export const PgSubscriptions = {
       s.userId,
       s.plan || 'free',
       s.status || 'active',
-      s.itemsLimit || 10,
+      s.itemsLimit != null ? s.itemsLimit : 10,
       featuresJson,
+      s.trialStartedAt || null,
+      s.trialEndsAt || null,
+      s.lifetimeActivatedAt || null,
+      s.paymentId || null,
+      s.paymentProvider || null,
       s.createdAt || now,
       s.updatedAt || now
     ]);
     return formatSubscription(res.rows[0]);
   },
+  async updateByUserId(userId, updates) {
+    const current = await this.findByUserId(userId);
+    if (!current) return null;
+    return await this.insert({ ...current, ...updates, updatedAt: new Date().toISOString() });
+  },
+  async upgradeToLifetime(userId, { paymentId, paymentProvider = 'kiwify' } = {}) {
+    const current = await this.findByUserId(userId) || { userId };
+    const now = new Date().toISOString();
+    return await this.insert({
+      ...current,
+      plan: 'lifetime',
+      status: 'active',
+      itemsLimit: -1,
+      lifetimeActivatedAt: now,
+      paymentId: paymentId || current.paymentId || null,
+      paymentProvider: paymentProvider || 'kiwify',
+      features: {
+        aiProcessing: true,
+        unlimitedItems: true,
+        advancedReminders: true,
+        exportData: true
+      },
+      updatedAt: now
+    });
+  },
   async clear() {
     const pool = getPool();
     await pool.query('DELETE FROM subscriptions');
+  }
+};
+
+export const PgPaymentTransactions = {
+  async findByOrderId(orderId) {
+    const pool = getPool();
+    const res = await pool.query('SELECT * FROM payment_transactions WHERE order_id = $1', [orderId]);
+    return formatPaymentTransaction(res.rows[0]);
+  },
+  async insert(t) {
+    const pool = getPool();
+    const id = t.id || `pay_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`;
+    const now = new Date().toISOString();
+    const payloadJson = JSON.stringify(t.payload || {});
+    const query = `
+      INSERT INTO payment_transactions (id, order_id, provider, user_id, customer_email, amount_cents, status, payload, created_at, updated_at)
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
+      ON CONFLICT (order_id) DO UPDATE SET
+        status = EXCLUDED.status,
+        payload = EXCLUDED.payload,
+        updated_at = EXCLUDED.updated_at
+      RETURNING *;
+    `;
+    const res = await pool.query(query, [
+      id,
+      t.orderId,
+      t.provider || 'kiwify',
+      t.userId || null,
+      t.customerEmail,
+      t.amountCents || null,
+      t.status || 'paid',
+      payloadJson,
+      t.createdAt || now,
+      t.updatedAt || now
+    ]);
+    return formatPaymentTransaction(res.rows[0]);
+  },
+  async findAll(predicate) {
+    const pool = getPool();
+    const res = await pool.query('SELECT * FROM payment_transactions ORDER BY created_at DESC');
+    const mapped = res.rows.map(formatPaymentTransaction);
+    return predicate ? mapped.filter(predicate) : mapped;
+  },
+  async clear() {
+    const pool = getPool();
+    await pool.query('DELETE FROM payment_transactions');
   }
 };
 

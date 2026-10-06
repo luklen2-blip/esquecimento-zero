@@ -1,4 +1,5 @@
-import { Items, Documents, Categories, Subscriptions } from '../database/db.js';
+import { Items, Documents, Categories, Subscriptions, Users } from '../database/db.js';
+import { getAccessStatus } from '../utils/accessControl.js';
 
 export const dashboardController = {
   /**
@@ -104,14 +105,17 @@ export const dashboardController = {
         });
 
       const totalItems = userItems.length;
+      const user = await Users.findById(userId);
+      const accessStatus = getAccessStatus(subscription, user);
       const itemsLimit = subscription.itemsLimit;
-      const isUnlimited = itemsLimit === -1;
+      const isUnlimited = itemsLimit === -1 || accessStatus.isLifetime;
       const remainingQuota = isUnlimited ? 9999 : Math.max(0, itemsLimit - totalItems);
       const usagePercentage = isUnlimited ? 0 : Math.min(100, Math.round((totalItems / itemsLimit) * 100));
 
       return res.status(200).json({
         success: true,
         data: {
+          access: accessStatus,
           metrics: {
             totalItems,
             itemsLimit: isUnlimited ? 'Ilimitado' : itemsLimit,
@@ -121,7 +125,13 @@ export const dashboardController = {
             totalDocuments: userDocs.length,
             warrantiesCount: warrantiesEnding.length,
             expirationsCount: expirationsNear.length,
-            upcomingDueCount: upcomingDue.length
+            upcomingDueCount: upcomingDue.length,
+            trialDaysRemaining: accessStatus.daysRemaining,
+            isTrial: accessStatus.isTrial,
+            isLifetime: accessStatus.isLifetime,
+            isExpired: accessStatus.isExpired,
+            checkoutUrl: accessStatus.checkoutUrl,
+            priceBrl: accessStatus.priceBrl
           },
           warrantiesEnding: warrantiesEnding.slice(0, 5),
           expirationsNear: expirationsNear.slice(0, 5),

@@ -7,9 +7,11 @@ import { authController } from '../controllers/authController.js';
 import { dashboardController } from '../controllers/dashboardController.js';
 import { documentController } from '../controllers/documentController.js';
 import { itemController } from '../controllers/itemController.js';
+import { webhookController } from '../controllers/webhookController.js';
 import { requireAuth } from '../middleware/auth.js';
 import { authLimiter } from '../middleware/security.js';
 import { Categories } from '../database/db.js';
+import { COMMERCIAL_CONFIG } from '../config/commercial.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -81,5 +83,20 @@ router.get('/categories', requireAuth, async (req, res) => {
     res.status(500).json({ success: false, error: { message: err.message } });
   }
 });
+router.get('/commercial/config', (req, res) => {
+  res.json({
+    success: true,
+    data: {
+      checkoutUrl: COMMERCIAL_CONFIG.LIFETIME_CHECKOUT_URL,
+      priceBrl: COMMERCIAL_CONFIG.LIFETIME_PRICE_BRL,
+      trialDays: COMMERCIAL_CONFIG.TRIAL_DAYS
+    },
+    timestamp: new Date().toISOString()
+  });
+});
+
+// Webhook Kiwify (Idempotente e Seguro)
+router.post('/webhooks/kiwify', webhookController.handleKiwify);
+router.post('/payments/webhook', webhookController.handleKiwify);
 
 export default router;

@@ -35,6 +35,11 @@ CREATE TABLE IF NOT EXISTS subscriptions (
   status VARCHAR(50) NOT NULL DEFAULT 'active',
   items_limit INTEGER NOT NULL DEFAULT 10,
   features JSONB NOT NULL DEFAULT '{"aiProcessing": false, "unlimitedItems": false, "advancedReminders": false, "exportData": false}',
+  trial_started_at TIMESTAMPTZ,
+  trial_ends_at TIMESTAMPTZ,
+  lifetime_activated_at TIMESTAMPTZ,
+  payment_id VARCHAR(150),
+  payment_provider VARCHAR(50),
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
@@ -87,6 +92,27 @@ CREATE TABLE IF NOT EXISTS reminders (
   updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
+-- 7. TABELA DE TRANSAÇÕES E WEBHOOKS DE PAGAMENTO (IDEMPOTÊNCIA)
+CREATE TABLE IF NOT EXISTS payment_transactions (
+  id VARCHAR(100) PRIMARY KEY,
+  order_id VARCHAR(100) UNIQUE NOT NULL,
+  provider VARCHAR(50) NOT NULL DEFAULT 'kiwify',
+  user_id VARCHAR(100) REFERENCES users(id) ON DELETE SET NULL,
+  customer_email VARCHAR(255) NOT NULL,
+  amount_cents INTEGER,
+  status VARCHAR(50) NOT NULL,
+  payload JSONB,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+-- MIGRAÇÃO NÃO DESTRUTIVA PARA INSTÂNCIAS COM SCHEMA PRÉ-EXISTENTE
+ALTER TABLE subscriptions ADD COLUMN IF NOT EXISTS trial_started_at TIMESTAMPTZ;
+ALTER TABLE subscriptions ADD COLUMN IF NOT EXISTS trial_ends_at TIMESTAMPTZ;
+ALTER TABLE subscriptions ADD COLUMN IF NOT EXISTS lifetime_activated_at TIMESTAMPTZ;
+ALTER TABLE subscriptions ADD COLUMN IF NOT EXISTS payment_id VARCHAR(150);
+ALTER TABLE subscriptions ADD COLUMN IF NOT EXISTS payment_provider VARCHAR(50);
+
 -- ÍNDICES DE PERFORMANCE E CONSULTA RÁPIDA
 CREATE INDEX IF NOT EXISTS idx_items_user_id ON items(user_id);
 CREATE INDEX IF NOT EXISTS idx_items_category_id ON items(category_id);
@@ -94,3 +120,6 @@ CREATE INDEX IF NOT EXISTS idx_documents_user_id ON documents(user_id);
 CREATE INDEX IF NOT EXISTS idx_reminders_user_id ON reminders(user_id);
 CREATE INDEX IF NOT EXISTS idx_reminders_item_id ON reminders(item_id);
 CREATE INDEX IF NOT EXISTS idx_subscriptions_user_id ON subscriptions(user_id);
+CREATE INDEX IF NOT EXISTS idx_payment_transactions_order_id ON payment_transactions(order_id);
+CREATE INDEX IF NOT EXISTS idx_payment_transactions_customer_email ON payment_transactions(customer_email);
+

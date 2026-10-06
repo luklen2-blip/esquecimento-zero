@@ -264,11 +264,38 @@ export function renderAdicionar() {
 export async function initAdicionarEvents() {
   currentDocumentId = null;
 
-  // Verifica cota do usuário
+  // Verifica status comercial e cota do usuário
   try {
     const meRes = await api.auth.me();
+    const access = meRes?.data?.access;
     const usage = meRes?.data?.usage;
-    if (usage && usage.isLimitReached) {
+
+    if (access && access.isExpired) {
+      const banner = document.getElementById('plan-quota-warning');
+      const saveBtn = document.getElementById('btn-save-item');
+      if (banner) {
+        banner.className = 'bg-rose-50 border border-rose-200 rounded-2xl p-4 flex flex-col sm:flex-row items-center justify-between gap-4';
+        banner.innerHTML = `
+          <div class="flex items-center gap-3">
+            <i data-lucide="lock" class="w-5 h-5 text-rose-600 flex-shrink-0"></i>
+            <div>
+              <p class="text-xs font-bold text-rose-900">Seu Período de Teste Gratuito Expirou</p>
+              <p class="text-[11px] text-rose-700">Seus registros anteriores continuam seguros. Para cadastrar novos itens, ative seu Acesso Vitalício por R$ 19,90 (pagamento único).</p>
+            </div>
+          </div>
+          <a href="${access.checkoutUrl || 'https://pay.kiwify.com.br/cd5quHM'}" target="_blank" rel="noopener noreferrer" class="px-4 py-2 bg-gradient-to-r from-amber-400 to-orange-400 hover:from-amber-300 hover:to-orange-300 text-slate-950 text-xs font-black rounded-xl whitespace-nowrap shadow-md flex items-center gap-1.5">
+            <i data-lucide="zap" class="w-3.5 h-3.5"></i>
+            <span>Ativar Vitalício (R$ 19,90)</span>
+          </a>
+        `;
+        banner.classList.remove('hidden');
+        if (window.lucide) window.lucide.createIcons({ root: banner });
+      }
+      if (saveBtn) {
+        saveBtn.disabled = true;
+        saveBtn.classList.add('opacity-50', 'cursor-not-allowed');
+      }
+    } else if (usage && usage.isLimitReached) {
       const banner = document.getElementById('plan-quota-warning');
       const saveBtn = document.getElementById('btn-save-item');
       if (banner) banner.classList.remove('hidden');

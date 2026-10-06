@@ -186,113 +186,116 @@ export function initPerfilEvents() {
 }
 
 export function renderPlanos() {
+  const KIWIFY_CHECKOUT_URL = 'https://pay.kiwify.com.br/cd5quHM';
+
   return `
     <div class="view-enter max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       
       <div class="text-center max-w-xl mx-auto mb-8">
-        <span class="text-xs font-bold uppercase tracking-wider text-brand-600">Escolha a Melhor Opção</span>
-        <h1 class="text-2xl sm:text-3xl font-black text-slate-900 mt-1">Planos Simples e Transparentes</h1>
+        <span class="text-xs font-bold uppercase tracking-wider text-brand-600">Modelo Comercial Transparente</span>
+        <h1 class="text-2xl sm:text-3xl font-black text-slate-900 mt-1">Acesso ao Esquecimento Zero</h1>
         <p class="text-xs sm:text-sm text-slate-500 mt-2">
-          Comece gratuitamente e evolua para o plano ilimitado com reconhecimento inteligente por IA quando precisar.
+          Experimente grátis por 7 dias completos. Desbloqueie o acesso permanente sem mensalidades nem anuidades.
         </p>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto items-stretch">
         
-        <!-- Plano Gratuito -->
-        <div class="bg-white rounded-2xl border-2 border-slate-200 p-6 sm:p-8 flex flex-col justify-between shadow-sm">
+        <!-- Card 1: Teste Gratuito de 7 Dias -->
+        <div class="bg-white rounded-2xl border-2 border-slate-200 p-6 sm:p-8 flex flex-col justify-between shadow-sm hover:border-slate-300 transition-all">
           <div>
             <div class="flex items-center justify-between mb-4">
-              <span class="px-3 py-1 rounded-full text-xs font-bold bg-slate-100 text-slate-700">Plano Atual</span>
-              <span class="text-xs font-semibold text-slate-400">Gratuito para sempre</span>
+              <span class="px-3 py-1 rounded-full text-xs font-bold bg-slate-100 text-slate-700">7 Dias de Teste</span>
+              <span class="text-xs font-semibold text-emerald-600 font-mono">Sem Cartão</span>
             </div>
-            <h2 class="text-2xl font-black text-slate-900">Gratuito</h2>
+            <h2 class="text-2xl font-black text-slate-900">Teste Gratuito</h2>
             <div class="my-4">
               <span class="text-4xl font-extrabold text-slate-900">R$ 0</span>
-              <span class="text-xs text-slate-500 font-medium">/mês</span>
+              <span class="text-xs text-slate-500 font-medium">/ 7 dias de avaliação</span>
             </div>
-            <p class="text-xs text-slate-600 mb-6">Ideal para quem quer testar e controlar seus itens principais.</p>
+            <p class="text-xs text-slate-600 mb-6">Comece imediatamente no cadastro e conheça o sistema por completo.</p>
 
             <ul class="space-y-3 text-xs text-slate-700">
               <li class="flex items-center gap-2.5">
                 <i data-lucide="check" class="w-4 h-4 text-emerald-600 flex-shrink-0"></i>
-                <span><strong>Até 10 itens</strong> cadastrados simultaneamente</span>
+                <span><strong>7 dias completos</strong> de acesso irrestrito</span>
               </li>
               <li class="flex items-center gap-2.5">
                 <i data-lucide="check" class="w-4 h-4 text-emerald-600 flex-shrink-0"></i>
-                <span>Painel de vencimentos e garantias</span>
+                <span>Cadastro de <strong>até 10 itens</strong> para teste</span>
               </li>
               <li class="flex items-center gap-2.5">
                 <i data-lucide="check" class="w-4 h-4 text-emerald-600 flex-shrink-0"></i>
-                <span>Lembretes básicos no painel</span>
+                <span>Painel de vencimentos e prazos prioritários</span>
               </li>
-              <li class="flex items-center gap-2.5 text-slate-400">
-                <i data-lucide="x" class="w-4 h-4 text-slate-300 flex-shrink-0"></i>
-                <span>Processamento automático por IA de notas fiscais</span>
+              <li class="flex items-center gap-2.5">
+                <i data-lucide="check" class="w-4 h-4 text-emerald-600 flex-shrink-0"></i>
+                <span>Leitura inteligente por IA de notas fiscais</span>
               </li>
-              <li class="flex items-center gap-2.5 text-slate-400">
-                <i data-lucide="x" class="w-4 h-4 text-slate-300 flex-shrink-0"></i>
-                <span>Exportação completa de dados</span>
+              <li class="flex items-center gap-2.5 text-slate-500">
+                <i data-lucide="info" class="w-4 h-4 text-amber-500 flex-shrink-0"></i>
+                <span>Após 7 dias: somente leitura até ativação do vitalício</span>
               </li>
             </ul>
           </div>
 
           <div class="mt-8 pt-4 border-t border-slate-100">
-            <button disabled class="w-full py-2.5 bg-slate-100 text-slate-400 font-bold text-xs rounded-xl cursor-not-allowed">
-              Seu Plano Ativo
-            </button>
+            <a href="/dashboard" class="w-full py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-xl flex items-center justify-center gap-1.5 transition-colors">
+              Continuar no Meu Painel
+            </a>
           </div>
         </div>
 
-        <!-- Plano Premium -->
-        <div class="bg-gradient-to-b from-slate-900 to-slate-950 text-white rounded-2xl p-6 sm:p-8 flex flex-col justify-between shadow-xl border border-slate-800 relative">
-          <div class="absolute -top-3 right-6 bg-gradient-to-r from-amber-400 to-orange-400 text-slate-950 text-[11px] font-extrabold uppercase px-3 py-1 rounded-full shadow-md">
-            Mais Escolhido
+        <!-- Card 2: Acesso Vitalício Kiwify -->
+        <div class="bg-gradient-to-b from-slate-900 via-slate-900 to-indigo-950 text-white rounded-2xl p-6 sm:p-8 flex flex-col justify-between shadow-2xl border-2 border-amber-400/40 relative">
+          <div class="absolute -top-3 right-6 bg-gradient-to-r from-amber-400 to-orange-400 text-slate-950 text-[11px] font-black uppercase px-3 py-1 rounded-full shadow-lg">
+            Oferta Especial • Pagamento Único
           </div>
 
           <div>
             <div class="flex items-center justify-between mb-4">
-              <span class="px-3 py-1 rounded-full text-xs font-bold bg-amber-400/20 text-amber-300 border border-amber-400/30">Premium Ilimitado</span>
+              <span class="px-3 py-1 rounded-full text-xs font-bold bg-amber-400/20 text-amber-300 border border-amber-400/30">💎 Acesso Vitalício</span>
+              <span class="text-xs font-bold text-amber-400">Sem Mensalidade</span>
             </div>
-            <h2 class="text-2xl font-black text-white">Premium IA</h2>
+            <h2 class="text-2xl font-black text-white">Permanente</h2>
             <div class="my-4">
-              <span class="text-4xl font-extrabold text-white">R$ 14,90</span>
-              <span class="text-xs text-slate-400 font-medium">/mês ou R$ 149/ano no PIX</span>
+              <span class="text-4xl font-extrabold text-amber-400">R$ 19,90</span>
+              <span class="text-xs text-slate-300 font-medium ml-1">pagamento único</span>
             </div>
-            <p class="text-xs text-slate-300 mb-6">Para quem quer automação total sem digitar dados e sem limite de itens.</p>
+            <p class="text-xs text-slate-300 mb-6">Pague apenas uma vez e utilize para sempre. Sem mensalidades e sem renovação oculta.</p>
 
             <ul class="space-y-3 text-xs text-slate-200">
               <li class="flex items-center gap-2.5">
                 <i data-lucide="check" class="w-4 h-4 text-amber-400 flex-shrink-0"></i>
-                <span><strong>Itens ilimitados</strong> sem restrições</span>
+                <span><strong>Acesso permanente vitalício</strong> sem expiração</span>
               </li>
               <li class="flex items-center gap-2.5">
                 <i data-lucide="check" class="w-4 h-4 text-amber-400 flex-shrink-0"></i>
-                <span><strong>Processamento inteligente por IA / OCR</strong> de fotos e PDFs</span>
+                <span><strong>Itens e notas fiscais ilimitados</strong></span>
               </li>
               <li class="flex items-center gap-2.5">
                 <i data-lucide="check" class="w-4 h-4 text-amber-400 flex-shrink-0"></i>
-                <span>Lembretes e notificações avançadas</span>
+                <span><strong>Processamento inteligente por IA / OCR</strong> contínuo</span>
               </li>
               <li class="flex items-center gap-2.5">
                 <i data-lucide="check" class="w-4 h-4 text-amber-400 flex-shrink-0"></i>
-                <span>Histórico completo e pesquisa inteligente</span>
+                <span>Lembretes e alertas prioritários de garantia e validade</span>
               </li>
               <li class="flex items-center gap-2.5">
                 <i data-lucide="check" class="w-4 h-4 text-amber-400 flex-shrink-0"></i>
-                <span>Categorias personalizadas e exportação</span>
+                <span>Seus dados salvos em segurança e nunca excluídos</span>
               </li>
             </ul>
           </div>
 
-          <div class="mt-8 pt-4 border-t border-slate-800">
-            <button onclick="alert('Cobrança em ambiente de preparação! O gateway PIX nativo será ativado na fase de monetização.');"
-              class="w-full py-3 bg-gradient-to-r from-amber-400 to-orange-400 hover:from-amber-300 hover:to-orange-300 text-slate-950 font-bold text-xs rounded-xl shadow-lg shadow-amber-400/20 transition-all flex items-center justify-center gap-2">
-              <i data-lucide="sparkles" class="w-4 h-4"></i>
-              <span>Assinar Plano Premium (PIX / Cartão)</span>
-            </button>
-            <p class="text-[10px] text-center text-slate-400 mt-2">
-              Cobrança segura • Cancele quando quiser • Garantia de 7 dias
+          <div class="mt-8 pt-4 border-t border-slate-800 space-y-2">
+            <a href="${KIWIFY_CHECKOUT_URL}" target="_blank" rel="noopener noreferrer"
+              class="w-full py-3.5 bg-gradient-to-r from-amber-400 to-orange-400 hover:from-amber-300 hover:to-orange-300 text-slate-950 font-black text-xs sm:text-sm rounded-xl shadow-lg shadow-amber-400/25 transition-all flex items-center justify-center gap-2">
+              <i data-lucide="zap" class="w-4 h-4"></i>
+              <span>Garantir Acesso Vitalício (R$ 19,90)</span>
+            </a>
+            <p class="text-[10px] text-center text-slate-400">
+              🔒 Checkout 100% seguro pela Kiwify • Garantia legal de 7 dias (CDC) • Maiores de 18 anos
             </p>
           </div>
         </div>

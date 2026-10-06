@@ -6,17 +6,17 @@
     "categoryId": "cat_eletronicos",
     "title": "Smart TV 55 4K Crystal UHD",
     "store": "Magazine Luiza",
-    "purchaseDate": "2025-10-23",
+    "purchaseDate": "2025-10-24",
     "price": 2499,
     "quantity": 1,
     "invoiceNumber": "NF-49281",
     "warrantyPeriodMonths": 12,
-    "warrantyEndDate": "2026-10-23",
+    "warrantyEndDate": "2026-10-24",
     "expirationDate": null,
     "notes": "Garantia de fábrica de 1 ano. Em caso de defeito, acionar suporte Samsung.",
     "status": "active",
-    "createdAt": "2026-10-05T22:28:02.044Z",
-    "updatedAt": "2026-10-05T22:28:02.044Z"
+    "createdAt": "2026-10-06T01:24:42.435Z",
+    "updatedAt": "2026-10-06T01:24:42.435Z"
   },
   {
     "id": "itm_cafeteira_nespresso",
@@ -25,17 +25,17 @@
     "categoryId": "cat_eletrodomesticos",
     "title": "Cafeteira Nespresso Essenza Mini",
     "store": "Nespresso Brasil",
-    "purchaseDate": "2025-11-19",
+    "purchaseDate": "2025-11-20",
     "price": 420,
     "quantity": 1,
     "invoiceNumber": "NF-10923",
     "warrantyPeriodMonths": 12,
-    "warrantyEndDate": "2026-11-19",
+    "warrantyEndDate": "2026-11-20",
     "expirationDate": null,
     "notes": "Comprada na promoção com 50 cápsulas de brinde.",
     "status": "active",
-    "createdAt": "2026-10-05T22:28:02.046Z",
-    "updatedAt": "2026-10-05T22:28:02.046Z"
+    "createdAt": "2026-10-06T01:24:42.439Z",
+    "updatedAt": "2026-10-06T01:24:42.439Z"
   },
   {
     "id": "itm_amoxicilina",
@@ -44,17 +44,17 @@
     "categoryId": "cat_saude",
     "title": "Antibiótico Amoxicilina 500mg",
     "store": "Farmácia Popular",
-    "purchaseDate": "2026-09-15",
+    "purchaseDate": "2026-09-16",
     "price": 45,
     "quantity": 2,
     "invoiceNumber": null,
     "warrantyPeriodMonths": null,
     "warrantyEndDate": null,
-    "expirationDate": "2026-10-10",
+    "expirationDate": "2026-10-11",
     "notes": "Uso oral prescrito. Descartar após o término do tratamento.",
     "status": "active",
-    "createdAt": "2026-10-05T22:28:02.050Z",
-    "updatedAt": "2026-10-05T22:28:02.050Z"
+    "createdAt": "2026-10-06T01:24:42.443Z",
+    "updatedAt": "2026-10-06T01:24:42.443Z"
   },
   {
     "id": "itm_vitamina_d3",
@@ -63,16 +63,16 @@
     "categoryId": "cat_saude",
     "title": "Suplemento Vitamina D3 2000UI (120 caps)",
     "store": "Farmácia Central",
-    "purchaseDate": "2026-08-06",
+    "purchaseDate": "2026-08-07",
     "price": 68,
     "quantity": 1,
     "invoiceNumber": null,
     "warrantyPeriodMonths": null,
     "warrantyEndDate": null,
-    "expirationDate": "2026-10-29",
+    "expirationDate": "2026-10-30",
     "notes": "Tomar 1 cápsula ao dia pela manhã com refeição.",
     "status": "active",
-    "createdAt": "2026-10-05T22:28:02.052Z",
-    "updatedAt": "2026-10-05T22:28:02.052Z"
+    "createdAt": "2026-10-06T01:24:42.447Z",
+    "updatedAt": "2026-10-06T01:24:42.447Z"
   }
 ]

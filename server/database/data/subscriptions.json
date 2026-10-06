@@ -5,148 +5,15 @@
     "plan": "free",
     "status": "active",
     "itemsLimit": 10,
+    "trialStartedAt": "2026-10-06T01:24:42.407Z",
+    "trialEndsAt": "2026-10-13T01:24:42.407Z",
     "features": {
       "aiProcessing": false,
       "unlimitedItems": false,
       "advancedReminders": false,
       "exportData": false
     },
-    "createdAt": "2026-10-05T22:28:02.019Z",
-    "updatedAt": "2026-10-05T22:28:02.019Z"
-  },
-  {
-    "userId": "use_1791239299129_3q33c",
-    "plan": "free",
-    "status": "active",
-    "itemsLimit": 10,
-    "features": {
-      "aiProcessing": false,
-      "unlimitedItems": false,
-      "advancedReminders": false,
-      "exportData": false
-    },
-    "id": "sub_1791239299132_qntpo",
-    "createdAt": "2026-10-05T22:28:19.132Z",
-    "updatedAt": "2026-10-05T22:28:19.132Z"
-  },
-  {
-    "userId": "use_1791239331389_g91t4",
-    "plan": "free",
-    "status": "active",
-    "itemsLimit": 10,
-    "features": {
-      "aiProcessing": false,
-      "unlimitedItems": false,
-      "advancedReminders": false,
-      "exportData": false
-    },
-    "id": "sub_1791239331407_9fdhx",
-    "createdAt": "2026-10-05T22:28:51.407Z",
-    "updatedAt": "2026-10-05T22:28:51.407Z"
-  },
-  {
-    "userId": "use_1791239698320_jd0px",
-    "plan": "free",
-    "status": "active",
-    "itemsLimit": 10,
-    "features": {
-      "aiProcessing": false,
-      "unlimitedItems": false,
-      "advancedReminders": false,
-      "exportData": false
-    },
-    "id": "sub_1791239698322_8e6vo",
-    "createdAt": "2026-10-05T22:34:58.322Z",
-    "updatedAt": "2026-10-05T22:34:58.322Z"
-  },
-  {
-    "userId": "use_1791239906225_x2w7v",
-    "plan": "free",
-    "status": "active",
-    "itemsLimit": 10,
-    "features": {
-      "aiProcessing": false,
-      "unlimitedItems": false,
-      "advancedReminders": false,
-      "exportData": false
-    },
-    "id": "sub_1791239906228_n56ls",
-    "createdAt": "2026-10-05T22:38:26.228Z",
-    "updatedAt": "2026-10-05T22:38:26.228Z"
-  },
-  {
-    "userId": "use_1791240241985_rqx07",
-    "plan": "free",
-    "status": "active",
-    "itemsLimit": 10,
-    "features": {
-      "aiProcessing": false,
-      "unlimitedItems": false,
-      "advancedReminders": false,
-      "exportData": false
-    },
-    "id": "sub_1791240241988_fody9",
-    "createdAt": "2026-10-05T22:44:01.988Z",
-    "updatedAt": "2026-10-05T22:44:01.988Z"
-  },
-  {
-    "userId": "use_1791241253883_85bdi",
-    "plan": "free",
-    "status": "active",
-    "itemsLimit": 10,
-    "features": {
-      "aiProcessing": false,
-      "unlimitedItems": false,
-      "advancedReminders": false,
-      "exportData": false
-    },
-    "id": "sub_1791241253885_hxahs",
-    "createdAt": "2026-10-05T23:00:53.885Z",
-    "updatedAt": "2026-10-05T23:00:53.885Z"
-  },
-  {
-    "userId": "use_1791243138451_po0w7",
-    "plan": "free",
-    "status": "active",
-    "itemsLimit": 10,
-    "features": {
-      "aiProcessing": false,
-      "unlimitedItems": false,
-      "advancedReminders": false,
-      "exportData": false
-    },
-    "id": "sub_1791243138455_q8j31",
-    "createdAt": "2026-10-05T23:32:18.455Z",
-    "updatedAt": "2026-10-05T23:32:18.455Z"
-  },
-  {
-    "userId": "use_1791244175358_26f04",
-    "plan": "free",
-    "status": "active",
-    "itemsLimit": 10,
-    "features": {
-      "aiProcessing": false,
-      "unlimitedItems": false,
-      "advancedReminders": false,
-      "exportData": false
-    },
-    "id": "sub_1791244175362_ckw72",
-    "createdAt": "2026-10-05T23:49:35.362Z",
-    "updatedAt": "2026-10-05T23:49:35.362Z"
-  },
-  {
-    "userId": "use_1791244303907_ngmyy",
-    "plan": "free",
-    "status": "active",
-    "itemsLimit": 10,
-    "features": {
-      "aiProcessing": false,
-      "unlimitedItems": false,
-      "advancedReminders": false,
-      "exportData": false
-    },
-    "id": "sub_1791244303910_eatjw",
-    "createdAt": "2026-10-05T23:51:43.910Z",
-    "updatedAt": "2026-10-05T23:51:43.910Z"
+    "createdAt": "2026-10-06T01:24:42.407Z",
+    "updatedAt": "2026-10-06T01:24:42.407Z"
   }
 ]

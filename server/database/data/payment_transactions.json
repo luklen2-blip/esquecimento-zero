@@ -1,0 +1,62 @@
+[
+  {
+    "orderId": "kiwify_order_1791249784883",
+    "provider": "kiwify",
+    "userId": "use_1791249784807_xujuu",
+    "customerEmail": "comercial_1791249784653@teste.com",
+    "amountCents": 1990,
+    "status": "paid",
+    "payload": {
+      "order_id": "kiwify_order_1791249784883",
+      "order_status": "paid",
+      "order_amount": 1990,
+      "Customer": {
+        "email": "comercial_1791249784653@teste.com",
+        "name": "Cliente em Teste"
+      }
+    },
+    "id": "pay_1791249784894_g5tl3",
+    "createdAt": "2026-10-06T01:23:04.895Z",
+    "updatedAt": "2026-10-06T01:23:04.895Z"
+  },
+  {
+    "orderId": "kiwify_order_1791249800045",
+    "provider": "kiwify",
+    "userId": "use_1791249799971_hu4j4",
+    "customerEmail": "comercial_1791249799812@teste.com",
+    "amountCents": 1990,
+    "status": "paid",
+    "payload": {
+      "order_id": "kiwify_order_1791249800045",
+      "order_status": "paid",
+      "order_amount": 1990,
+      "Customer": {
+        "email": "comercial_1791249799812@teste.com",
+        "name": "Cliente em Teste"
+      }
+    },
+    "id": "pay_1791249800057_5uxpa",
+    "createdAt": "2026-10-06T01:23:20.057Z",
+    "updatedAt": "2026-10-06T01:23:20.057Z"
+  },
+  {
+    "orderId": "kiwify_order_1791249829966",
+    "provider": "kiwify",
+    "userId": "use_1791249829870_314s0",
+    "customerEmail": "comercial_1791249829688@teste.com",
+    "amountCents": 1990,
+    "status": "paid",
+    "payload": {
+      "order_id": "kiwify_order_1791249829966",
+      "order_status": "paid",
+      "order_amount": 1990,
+      "Customer": {
+        "email": "comercial_1791249829688@teste.com",
+        "name": "Cliente em Teste"
+      }
+    },
+    "id": "pay_1791249829979_q2fvi",
+    "createdAt": "2026-10-06T01:23:49.979Z",
+    "updatedAt": "2026-10-06T01:23:49.979Z"
+  }
+]
