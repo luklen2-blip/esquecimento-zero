@@ -306,6 +306,82 @@ export function renderPlanos() {
 
       </div>
 
+      <!-- Argumento de Valor: O Custo Real do Esquecimento -->
+      <div class="mt-12 max-w-4xl mx-auto bg-white rounded-3xl border border-slate-200/80 p-6 sm:p-10 shadow-sm space-y-6">
+        <div class="text-center max-w-2xl mx-auto">
+          <span class="px-3 py-1 rounded-full text-xs font-black bg-rose-50 text-rose-700 border border-rose-200 uppercase">
+            💡 Por que usar o Esquecimento Zero?
+          </span>
+          <h2 class="text-xl sm:text-2xl font-black text-slate-950 mt-3">
+            Porque esquecer custa caro: tempo, dinheiro e dor de cabeça.
+          </h2>
+          <p class="text-xs sm:text-sm text-slate-500 mt-2">
+            Quantas vezes você já passou por alguma dessas situações frustrantes?
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5 pt-2">
+          <div class="p-4 rounded-2xl bg-slate-50 border border-slate-100 flex items-start gap-3">
+            <span class="text-xl">⚠️</span>
+            <div>
+              <h4 class="text-xs sm:text-sm font-bold text-slate-900">Perder a garantia</h4>
+              <p class="text-xs text-slate-500 mt-0.5">O produto dá defeito e o prazo de assistência do fabricante expirou ontem.</p>
+            </div>
+          </div>
+
+          <div class="p-4 rounded-2xl bg-slate-50 border border-slate-100 flex items-start gap-3">
+            <span class="text-xl">📄</span>
+            <div>
+              <h4 class="text-xs sm:text-sm font-bold text-slate-900">Cadê a nota fiscal?</h4>
+              <p class="text-xs text-slate-500 mt-0.5">Procurar em gavetas e caixas de e-mail sem sucesso na hora que mais precisa.</p>
+            </div>
+          </div>
+
+          <div class="p-4 rounded-2xl bg-slate-50 border border-slate-100 flex items-start gap-3">
+            <span class="text-xl">🪪</span>
+            <div>
+              <h4 class="text-xs sm:text-sm font-bold text-slate-900">Documento vencido</h4>
+              <p class="text-xs text-slate-500 mt-0.5">CNH, passaporte ou certidões expiradas de surpresa em viagens ou cartório.</p>
+            </div>
+          </div>
+
+          <div class="p-4 rounded-2xl bg-slate-50 border border-slate-100 flex items-start gap-3">
+            <span class="text-xl">💸</span>
+            <div>
+              <h4 class="text-xs sm:text-sm font-bold text-slate-900">Vencimento de conta</h4>
+              <p class="text-xs text-slate-500 mt-0.5">Multas, juros e cortes de serviço desnecessários por esquecer a data de pagar.</p>
+            </div>
+          </div>
+
+          <div class="p-4 rounded-2xl bg-slate-50 border border-slate-100 flex items-start gap-3">
+            <span class="text-xl">🚗</span>
+            <div>
+              <h4 class="text-xs sm:text-sm font-bold text-slate-900">Manutenção do carro</h4>
+              <p class="text-xs text-slate-500 mt-0.5">Troca de óleo, rodízio de pneus e correia dentada esquecidas no hodômetro.</p>
+            </div>
+          </div>
+
+          <div class="p-4 rounded-2xl bg-slate-50 border border-slate-100 flex items-start gap-3">
+            <span class="text-xl">📦</span>
+            <div>
+              <h4 class="text-xs sm:text-sm font-bold text-slate-900">Onde guardei?</h4>
+              <p class="text-xs text-slate-500 mt-0.5">Não lembrar onde guardou comprovantes, manuais ou peças de reposição.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="p-6 rounded-2xl bg-gradient-to-r from-amber-50 via-orange-50 to-amber-50 border-2 border-amber-300/80 text-center space-y-3">
+          <p class="text-sm sm:text-base font-extrabold text-slate-900">
+            Por apenas <span class="text-amber-600 font-black">R$ 19,90 uma única vez</span>, você tem um lugar seguro para guardar aquilo que não quer esquecer.
+          </p>
+          <a href="${KIWIFY_CHECKOUT_URL}" target="_blank" rel="noopener noreferrer"
+            class="inline-flex items-center justify-center gap-2 px-8 py-3.5 bg-gradient-to-r from-amber-400 to-orange-400 hover:from-amber-300 hover:to-orange-300 text-slate-950 font-black text-sm rounded-xl shadow-lg shadow-amber-400/25 transition-all hover:scale-105">
+            <i data-lucide="zap" class="w-4 h-4"></i>
+            <span>GARANTIR ACESSO VITALÍCIO — R$ 19,90</span>
+          </a>
+        </div>
+      </div>
+
     </div>
   `;
 }

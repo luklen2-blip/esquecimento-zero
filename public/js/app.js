@@ -1,5 +1,6 @@
 import { authStorage, api } from './api.js';
 import { initRouter, handleRoute } from './router.js';
+import { analytics } from './analytics.js';
 
 function renderHeaderUserActions() {
   const container = document.getElementById('user-nav-actions');

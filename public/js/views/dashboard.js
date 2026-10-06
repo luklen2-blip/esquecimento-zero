@@ -1,4 +1,5 @@
 import { api, showToast } from '../api.js';
+import { analytics } from '../analytics.js';
 
 export function renderDashboard() {
   return `
@@ -25,6 +26,44 @@ export async function initDashboardEvents() {
 
     renderDashboardContent(container, data, user);
     setupTrialCountdownTicker(data.access);
+
+    // Eventos do Botão de Compartilhamento
+    const shareBtn = document.getElementById('btn-share-app');
+    if (shareBtn) {
+      shareBtn.addEventListener('click', async () => {
+        analytics.track('compartilhamento_clicado');
+        const shareData = {
+          title: 'Esquecimento Zero',
+          text: 'O que você não quer esquecer? Conheça o Esquecimento Zero e guarde compras, garantias e notas.',
+          url: window.location.origin
+        };
+
+        if (navigator.share) {
+          try {
+            await navigator.share(shareData);
+            showToast('Obrigado por compartilhar o Esquecimento Zero!', 'success');
+          } catch {}
+        } else {
+          try {
+            await navigator.clipboard.writeText(`${shareData.text} Acesse: ${shareData.url}`);
+            showToast('Link copiado! Compartilhe com quem você conhece.', 'success');
+          } catch {
+            showToast(`Compartilhe o link: ${shareData.url}`, 'info');
+          }
+        }
+      });
+    }
+
+    // Eventos de fechamento do momento Aha!
+    const closeAhaBtn = document.getElementById('btn-close-aha');
+    if (closeAhaBtn) {
+      closeAhaBtn.addEventListener('click', () => {
+        sessionStorage.removeItem('ez_just_created');
+        const banner = document.getElementById('aha-moment-banner');
+        if (banner) banner.remove();
+      });
+    }
+
   } catch (err) {
     container.innerHTML = `
       <div class="bg-rose-50 border border-rose-200 rounded-2xl p-6 text-center max-w-lg mx-auto">
@@ -43,7 +82,7 @@ export async function initDashboardEvents() {
 function renderDashboardContent(container, data, user) {
   const { metrics, warrantiesEnding, expirationsNear, upcomingDue, recentDocuments, recentItems } = data;
 
-  const isFreePlan = metrics.plan === 'free';
+  const isFreePlan = metrics.plan === 'free' || metrics.plan === 'trial';
   const isLimitReached = isFreePlan && metrics.totalItems >= 10;
 
   // Formatador de Moeda BRL
@@ -97,11 +136,11 @@ function renderDashboardContent(container, data, user) {
           </div>
           <div>
             <div class="flex items-center gap-2">
-              <h3 class="text-base font-black text-white">🔒 Seu período gratuito terminou.</h3>
+              <h3 class="text-base font-black text-white">Seu período gratuito terminou.</h3>
               <span class="px-2.5 py-0.5 rounded-full text-[10px] font-black bg-rose-500/30 text-rose-300 uppercase border border-rose-500/40">Acesso Pausado</span>
             </div>
             <p class="text-xs sm:text-sm text-slate-300 mt-1 max-w-xl">
-              Todos os seus registros continuam salvos com segurança. Para continuar cadastrando novos itens e utilizando a IA, garanta seu acesso vitalício por <strong>R$ 19,90 (pagamento único)</strong>.
+              Todos os seus registros continuam salvos com segurança. Continue com acesso vitalício por apenas <strong>R$ 19,90 (pagamento único)</strong>.
             </p>
             <div class="mt-2.5">
               <div id="trial-countdown-text" class="px-3 py-1.5 rounded-xl bg-rose-950/80 border border-rose-500/50 text-xs sm:text-sm font-black text-rose-300 inline-flex items-center gap-1.5">
@@ -118,36 +157,44 @@ function renderDashboardContent(container, data, user) {
       </div>
     `;
   } else {
-    // 5 Estágios progressivos de conversão no teste de 24 horas
+    // 5 Estágios visuais das 24 Horas
     let bannerBorder = 'border-indigo-500/30';
     let bannerBg = 'bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900';
     let iconBg = 'bg-brand-500/20 text-brand-400';
     let iconName = 'gift';
     let badgeClasses = 'bg-brand-500/20 text-brand-300 border border-brand-500/30';
+    let headline = '🎁 Seu teste gratuito está ativo';
+    let message = 'Você tem 24 horas para experimentar o Esquecimento Zero. Você ainda tem bastante tempo para experimentar.';
+    let badgeText = '24H GRÁTIS';
 
-    if (notice.stage === 'last_hour') {
+    if (hoursRemaining < 1) {
       bannerBorder = 'border-2 border-rose-500/80 animate-pulse';
       bannerBg = 'bg-gradient-to-r from-rose-950 via-slate-900 to-orange-950';
       iconBg = 'bg-rose-500/20 text-rose-400';
       iconName = 'flame';
       badgeClasses = 'bg-rose-500/30 text-rose-300 border border-rose-500/40 animate-pulse';
-    } else if (notice.stage === 'urgent_3h') {
+      headline = '⚠️ Sua experiência gratuita termina em breve.';
+      message = 'Seu período gratuito termina em poucos minutos. Garanta seu acesso vitalício permanente por R$ 19,90.';
+      badgeText = 'ÚLTIMA HORA';
+    } else if (hoursRemaining < 3) {
       bannerBorder = 'border-2 border-amber-500/70';
       bannerBg = 'bg-gradient-to-r from-amber-950 via-slate-900 to-orange-950';
       iconBg = 'bg-amber-500/20 text-amber-400';
       iconName = 'alert-triangle';
       badgeClasses = 'bg-amber-500/30 text-amber-300 border border-amber-500/40';
-    } else if (notice.stage === 'warning_12h') {
+      headline = '⏰ Seu período gratuito está terminando.';
+      message = 'Faltam poucas horas para o encerramento do teste. Continue com acesso vitalício permanente por apenas R$ 19,90.';
+      badgeText = 'RETA FINAL';
+    } else if (hoursRemaining < 12) {
       bannerBorder = 'border border-amber-500/40';
       bannerBg = 'bg-gradient-to-r from-slate-900 via-amber-950/40 to-slate-900';
       iconBg = 'bg-amber-500/20 text-amber-400';
       iconName = 'clock';
       badgeClasses = 'bg-amber-400/20 text-amber-300 border border-amber-400/30';
+      headline = 'Aproveite seu período gratuito';
+      message = 'Aproveite seu período gratuito para organizar suas informações importantes.';
+      badgeText = 'PERÍODO ATIVO';
     }
-
-    const headline = notice.headline || 'Período de Teste Gratuito de 24 Horas';
-    const message = notice.message || 'Cadastre seus itens e conheça o sistema. Garanta seu Acesso Vitalício por apenas R$ 19,90.';
-    const badgeText = notice.badge || '24H GRÁTIS';
 
     commercialBannerHtml = `
       <div class="${bannerBg} ${bannerBorder} text-white rounded-2xl p-5 sm:p-6 shadow-xl flex flex-col md:flex-row md:items-center justify-between gap-4">
@@ -182,6 +229,123 @@ function renderDashboardContent(container, data, user) {
     `;
   }
 
+  // 1. Momento "Aha!" pós-cadastro
+  const justCreatedRaw = sessionStorage.getItem('ez_just_created');
+  let ahaMomentHtml = '';
+  if (justCreatedRaw) {
+    try {
+      const itemInfo = JSON.parse(justCreatedRaw);
+      ahaMomentHtml = `
+        <div id="aha-moment-banner" class="bg-gradient-to-r from-emerald-950 via-slate-900 to-teal-950 text-white rounded-3xl p-6 sm:p-7 shadow-xl border-2 border-emerald-500/50 space-y-4">
+          <div class="flex items-start justify-between gap-4">
+            <div class="flex items-start gap-3.5">
+              <div class="w-12 h-12 rounded-2xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-black text-2xl flex-shrink-0 border border-emerald-500/30">
+                ✅
+              </div>
+              <div>
+                <div class="flex items-center gap-2">
+                  <h3 class="text-lg sm:text-xl font-black text-white">Pronto!</h3>
+                  <span class="px-2 py-0.5 rounded-full text-[10px] font-black bg-emerald-500/20 text-emerald-300 uppercase">Informação Segura</span>
+                </div>
+                <p class="text-xs sm:text-sm text-emerald-300 font-bold mt-1">
+                  Você acabou de tirar essa informação da sua memória e colocá-la no Esquecimento Zero.
+                </p>
+                <p class="text-xs sm:text-sm text-slate-300 mt-0.5">
+                  Agora você pode encontrar essa informação quando precisar.
+                </p>
+              </div>
+            </div>
+            <button id="btn-close-aha" type="button" class="text-slate-400 hover:text-white p-1 text-sm font-bold">
+              ✕
+            </button>
+          </div>
+
+          <div class="pt-3 border-t border-emerald-500/30">
+            <p class="text-xs font-bold text-emerald-200 mb-2">O que você pode adicionar agora a este item?</p>
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs font-semibold">
+              <a href="/adicionar" class="p-2.5 rounded-xl bg-white/10 hover:bg-white/20 border border-white/10 flex items-center gap-2 transition-colors">
+                <span>📄</span> <span>Nota fiscal</span>
+              </a>
+              <a href="/adicionar" class="p-2.5 rounded-xl bg-white/10 hover:bg-white/20 border border-white/10 flex items-center gap-2 transition-colors">
+                <span>🛡️</span> <span>Garantia</span>
+              </a>
+              <a href="/adicionar" class="p-2.5 rounded-xl bg-white/10 hover:bg-white/20 border border-white/10 flex items-center gap-2 transition-colors">
+                <span>⏰</span> <span>Lembrete</span>
+              </a>
+              <a href="/adicionar" class="p-2.5 rounded-xl bg-white/10 hover:bg-white/20 border border-white/10 flex items-center gap-2 transition-colors">
+                <span>📝</span> <span>Observação</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      `;
+    } catch {}
+  }
+
+  // 2. Onboarding Passo 1 (quando usuário possui 0 itens)
+  let onboardingHtml = '';
+  if (metrics.totalItems === 0 && !justCreatedRaw) {
+    onboardingHtml = `
+      <div class="bg-gradient-to-br from-brand-950 via-slate-900 to-indigo-950 text-white rounded-3xl p-6 sm:p-8 shadow-xl border-2 border-brand-500/30 space-y-5">
+        <div class="flex items-center gap-3">
+          <div class="w-12 h-12 rounded-2xl bg-brand-500/20 text-brand-400 flex items-center justify-center font-black text-xl border border-brand-500/30">
+            🚀
+          </div>
+          <div>
+            <span class="px-2.5 py-0.5 rounded-full text-[10px] font-black bg-brand-500/30 text-brand-300 uppercase tracking-wider">Passo 1</span>
+            <h2 class="text-xl sm:text-2xl font-black text-white mt-0.5">Vamos começar com uma coisa importante.</h2>
+          </div>
+        </div>
+        <p class="text-xs sm:text-sm text-slate-300 max-w-2xl leading-relaxed">
+          Não tente cadastrar tudo de uma vez. Comece por uma informação ou compra recente que você costuma esquecer: seu celular, uma garantia ativa, uma compra ou a revisão do carro.
+        </p>
+
+        <div class="flex flex-col sm:flex-row sm:items-center gap-3 pt-1">
+          <a href="/adicionar" class="inline-flex items-center justify-center gap-2 px-6 py-3.5 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-slate-950 font-black text-sm rounded-xl shadow-lg shadow-emerald-500/25 transition-transform hover:scale-105">
+            <i data-lucide="plus-circle" class="w-5 h-5"></i>
+            <span>➕ Cadastrar meu primeiro item</span>
+          </a>
+          <a href="/como-usar" class="inline-flex items-center justify-center gap-1.5 px-4 py-3 bg-white/10 hover:bg-white/20 text-white font-bold text-xs rounded-xl transition-colors">
+            <i data-lucide="book-open" class="w-4 h-4"></i>
+            <span>Como usar no dia a dia</span>
+          </a>
+        </div>
+
+        <div class="pt-3 border-t border-white/10">
+          <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-2">Exemplos rápidos do que cadastrar agora:</p>
+          <div class="flex flex-wrap gap-2 text-xs font-semibold text-slate-200">
+            <span class="px-3 py-1.5 rounded-xl bg-white/10 border border-white/10 flex items-center gap-1.5">📱 Celular ou Computador</span>
+            <span class="px-3 py-1.5 rounded-xl bg-white/10 border border-white/10 flex items-center gap-1.5">📺 TV ou Eletrodoméstico</span>
+            <span class="px-3 py-1.5 rounded-xl bg-white/10 border border-white/10 flex items-center gap-1.5">🚗 Revisão do Veículo</span>
+            <span class="px-3 py-1.5 rounded-xl bg-white/10 border border-white/10 flex items-center gap-1.5">📄 Nota Fiscal recente</span>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  // 3. Sugestão Contextual para Segundo Cadastro (quando 1 <= totalItems <= 4)
+  let contextualSuggestionHtml = '';
+  if (metrics.totalItems > 0 && metrics.totalItems <= 4) {
+    contextualSuggestionHtml = `
+      <div class="bg-gradient-to-r from-slate-900 to-indigo-950 text-white rounded-2xl p-5 border border-indigo-500/30 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <h4 class="text-xs sm:text-sm font-bold text-indigo-300 flex items-center gap-1.5">
+            <i data-lucide="sparkles" class="w-4 h-4 text-amber-400"></i>
+            Quer deixar esse cadastro ainda mais completo?
+          </h4>
+          <p class="text-xs text-slate-300 mt-1">
+            Se for produto: adicione a nota fiscal e a garantia. Se for veículo: adicione manutenção e próximos vencimentos. Se for documento: adicione a data de validade e um lembrete.
+          </p>
+        </div>
+        <a href="/adicionar" class="px-4 py-2 bg-white/10 hover:bg-white/20 text-white text-xs font-bold rounded-xl whitespace-nowrap flex items-center gap-1.5 self-start sm:self-auto transition-colors">
+          <i data-lucide="plus" class="w-3.5 h-3.5"></i>
+          <span>Adicionar outro item</span>
+        </a>
+      </div>
+    `;
+  }
+
   const userBadgeText = isLifetime
     ? 'Acesso Vitalício'
     : isExpired
@@ -191,6 +355,15 @@ function renderDashboardContent(container, data, user) {
   container.innerHTML = `
     <!-- Banner Comercial de Status -->
     ${commercialBannerHtml}
+
+    <!-- Momento Aha! (se acabou de criar) -->
+    ${ahaMomentHtml}
+
+    <!-- Onboarding de Primeiro Item (se vazio) -->
+    ${onboardingHtml}
+
+    <!-- Sugestão Contextual (se tem 1-4 itens) -->
+    ${contextualSuggestionHtml}
 
     <!-- 1. Cabeçalho de Boas-Vindas e Ação Rápida -->
     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 bg-white p-5 sm:p-6 rounded-2xl border border-slate-200/80 shadow-sm">
@@ -205,7 +378,7 @@ function renderDashboardContent(container, data, user) {
           </span>
         </div>
         <p class="text-xs sm:text-sm text-slate-500 mt-1">
-          Seu painel inteligente de controle de notas fiscais, validades e garantias.
+          Seu lugar para guardar compras, notas, garantias e o que você não quer esquecer.
         </p>
       </div>
 
@@ -511,10 +684,90 @@ function renderDashboardContent(container, data, user) {
           </a>
         </div>
 
+        <!-- Card: Hábito de Uso (Regra Simples) -->
+        <div class="bg-gradient-to-br from-slate-900 via-slate-800 to-indigo-950 text-white rounded-2xl p-5 border border-indigo-500/20 shadow-sm space-y-3">
+          <div class="flex items-center gap-2.5">
+            <div class="w-8 h-8 rounded-lg bg-indigo-500/20 text-indigo-400 flex items-center justify-center flex-shrink-0">
+              <i data-lucide="brain" class="w-4 h-4"></i>
+            </div>
+            <h3 class="text-sm font-bold text-white">Você não precisa lembrar.</h3>
+          </div>
+          <p class="text-xs text-slate-300 leading-relaxed">
+            O Esquecimento Zero lembra por você. Adote uma regra simples no seu dia a dia:
+          </p>
+          <div class="p-3 rounded-xl bg-white/5 border border-white/10 text-xs text-amber-300 font-semibold italic">
+            "Se eu sei que vou precisar lembrar disso depois, eu cadastro agora."
+          </div>
+        </div>
+
+        <!-- Bloco de Compartilhamento / Aquisição -->
+        <div class="bg-white rounded-2xl border border-slate-200/80 shadow-sm p-5 space-y-3">
+          <div class="flex items-start gap-3">
+            <div class="w-9 h-9 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center flex-shrink-0">
+              <i data-lucide="share-2" class="w-4 h-4"></i>
+            </div>
+            <div>
+              <h4 class="text-sm font-bold text-slate-900 leading-tight">Conhece alguém que vive esquecendo onde guardou as coisas?</h4>
+              <p class="text-xs text-slate-500 mt-1 leading-relaxed">
+                Compartilhe o Esquecimento Zero e ajude amigos e família a nunca mais perder notas, prazos ou garantias.
+              </p>
+            </div>
+          </div>
+          <button id="btn-share-ez" type="button" class="inline-flex items-center justify-center gap-2 w-full py-2.5 bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs rounded-xl shadow-sm transition-all hover:scale-[1.01]">
+            <i data-lucide="send" class="w-3.5 h-3.5"></i>
+            <span id="btn-share-text">Compartilhar Esquecimento Zero</span>
+          </button>
+        </div>
+
       </div>
 
     </div>
   `;
+
+  // Inicializar ticker de contagem regressiva em tempo real sincronizado com o servidor
+  setupTrialCountdownTicker(access);
+
+  // Fechar banner Momento Aha
+  const closeAhaBtn = container.querySelector('#btn-close-aha');
+  if (closeAhaBtn) {
+    closeAhaBtn.addEventListener('click', () => {
+      sessionStorage.removeItem('ez_just_created');
+      const banner = document.getElementById('aha-moment-banner');
+      if (banner) banner.remove();
+    });
+  }
+
+  // Ação de compartilhamento com Web Share API ou clipboard fallback
+  const shareBtn = container.querySelector('#btn-share-ez');
+  if (shareBtn) {
+    shareBtn.addEventListener('click', async () => {
+      window.ezAnalytics?.track('compartilhamento_clicado');
+      const shareData = {
+        title: 'Esquecimento Zero — Guarde o que você não quer esquecer',
+        text: 'Você não precisa lembrar de tudo. O Esquecimento Zero guarda compras, notas, garantias e prazos para você.',
+        url: window.location.origin
+      };
+      if (navigator.share) {
+        try {
+          await navigator.share(shareData);
+          window.ezAnalytics?.track('compartilhamento_sucesso', { method: 'web_share' });
+        } catch (err) {
+          // Usuário cancelou o compartilhamento
+        }
+      } else if (navigator.clipboard) {
+        try {
+          await navigator.clipboard.writeText(window.location.origin);
+          const textSpan = shareBtn.querySelector('#btn-share-text');
+          if (textSpan) {
+            const original = textSpan.textContent;
+            textSpan.textContent = 'Link copiado para a área de transferência! ✅';
+            setTimeout(() => { textSpan.textContent = original; }, 3000);
+          }
+          window.ezAnalytics?.track('compartilhamento_sucesso', { method: 'clipboard' });
+        } catch (e) {}
+      }
+    });
+  }
 
   if (window.lucide) {
     window.lucide.createIcons({ root: container });

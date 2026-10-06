@@ -1,4 +1,5 @@
 import { api, showToast } from '../api.js';
+import { analytics } from '../analytics.js';
 
 let currentDocumentId = null;
 
@@ -438,7 +439,7 @@ export async function initAdicionarEvents() {
         saveBtn.innerHTML = `<i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i> Salvando no banco...`;
         if (window.lucide) window.lucide.createIcons();
 
-        await api.items.create({
+        const createdRes = await api.items.create({
           title,
           categoryId,
           store,
@@ -452,7 +453,21 @@ export async function initAdicionarEvents() {
           documentId: currentDocumentId
         });
 
-        showToast('Item registrado com sucesso! Lembretes programados.', 'success');
+        // Grava contexto para momento "Aha!" no Dashboard
+        sessionStorage.setItem('ez_just_created', JSON.stringify({
+          title,
+          categoryId,
+          hasDocument: Boolean(currentDocumentId),
+          hasWarranty: Boolean(warrantyEndDate),
+          hasExpiration: Boolean(expirationDate)
+        }));
+
+        analytics.track('item_cadastrado', { categoryId, hasDocument: Boolean(currentDocumentId) });
+        if (currentDocumentId) analytics.track('documento_adicionado');
+        if (warrantyEndDate) analytics.track('garantia_adicionada');
+        if (expirationDate) analytics.track('lembrete_criado');
+
+        showToast('Item registrado com sucesso! Informação salva.', 'success');
         window.location.href = '/dashboard';
       } catch (err) {
         showToast(err.message || 'Falha ao salvar item.', 'error');
