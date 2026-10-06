@@ -5,6 +5,10 @@ node_modules/
 scratch/
 .env
 database/data/*.tmp
+server/database/data/*.tmp
+server/database/backups/
+public/uploads/*
+!public/uploads/demo_nf_samsung.pdf
 cloudflared.exe
 ca-bundle.crt
 tunnel_url.txt

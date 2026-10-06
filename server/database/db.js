@@ -1,6 +1,15 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import {
+  isPostgresConfigured,
+  PgUsers,
+  PgCategories,
+  PgSubscriptions,
+  PgDocuments,
+  PgItems,
+  PgReminders
+} from './postgres.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -8,7 +17,7 @@ const __dirname = path.dirname(__filename);
 const DEFAULT_DATA_DIR = path.join(__dirname, 'data');
 
 /**
- * JsonDB Atômico e Resiliente para Windows e Nuvem
+ * JsonDB Atômico e Resiliente para Windows e Nuvem (Modo Fallback / Local)
  * Grava em arquivo temporário (.tmp) antes do renomeio atômico (renameSync)
  * Previne corrupção em falhas de processo ou desligamento.
  */
@@ -101,10 +110,178 @@ export class JsonDB {
   }
 }
 
-// Instâncias singleton das coleções do sistema
-export const Users = new JsonDB('users');
-export const Documents = new JsonDB('documents');
-export const Items = new JsonDB('items');
-export const Reminders = new JsonDB('reminders');
-export const Categories = new JsonDB('categories');
-export const Subscriptions = new JsonDB('subscriptions');
+// Instâncias internas locais (JsonDB) para fallback e rollback
+const jsonUsers = new JsonDB('users');
+const jsonDocuments = new JsonDB('documents');
+const jsonItems = new JsonDB('items');
+const jsonReminders = new JsonDB('reminders');
+const jsonCategories = new JsonDB('categories');
+const jsonSubscriptions = new JsonDB('subscriptions');
+
+// ===================================================================
+// CAMADA UNIFICADA DE ACESSO A DADOS (DAL - REPOSITÓRIO ADAPTATIVO)
+// Se DATABASE_URL estiver presente -> opera no PostgreSQL persistente
+// Se DATABASE_URL estiver ausente  -> opera no JsonDB (fallback/local)
+// ===================================================================
+
+export const Users = {
+  async findById(id) {
+    if (isPostgresConfigured()) return await PgUsers.findById(id);
+    return jsonUsers.findById(id);
+  },
+  async findOne(predicate) {
+    if (isPostgresConfigured()) return await PgUsers.findOne(predicate);
+    return jsonUsers.findOne(predicate);
+  },
+  async findByEmail(email) {
+    if (isPostgresConfigured()) return await PgUsers.findByEmail(email);
+    return jsonUsers.findOne(u => u.email.toLowerCase() === email.toLowerCase());
+  },
+  async insert(doc) {
+    if (isPostgresConfigured()) return await PgUsers.insert(doc);
+    return jsonUsers.insert(doc);
+  },
+  async update(id, updates) {
+    if (isPostgresConfigured()) return await PgUsers.update(id, updates);
+    return jsonUsers.update(id, updates);
+  },
+  async delete(id) {
+    if (isPostgresConfigured()) return await PgUsers.delete(id);
+    return jsonUsers.delete(id);
+  },
+  async count(predicate) {
+    if (isPostgresConfigured()) return await PgUsers.count(predicate);
+    return jsonUsers.count(predicate);
+  },
+  async clear() {
+    if (isPostgresConfigured()) return await PgUsers.clear();
+    return jsonUsers.clear();
+  }
+};
+
+export const Categories = {
+  async findAll(predicate) {
+    if (isPostgresConfigured()) return await PgCategories.findAll(predicate);
+    return jsonCategories.findAll(predicate);
+  },
+  async findById(id) {
+    if (isPostgresConfigured()) return await PgCategories.findById(id);
+    return jsonCategories.findById(id);
+  },
+  async insert(doc) {
+    if (isPostgresConfigured()) return await PgCategories.insert(doc);
+    return jsonCategories.insert(doc);
+  },
+  async clear() {
+    if (isPostgresConfigured()) return await PgCategories.clear();
+    return jsonCategories.clear();
+  }
+};
+
+export const Subscriptions = {
+  async findOne(predicate) {
+    if (isPostgresConfigured()) return await PgSubscriptions.findOne(predicate);
+    return jsonSubscriptions.findOne(predicate);
+  },
+  async findByUserId(userId) {
+    if (isPostgresConfigured()) return await PgSubscriptions.findByUserId(userId);
+    return jsonSubscriptions.findOne(s => s.userId === userId);
+  },
+  async insert(doc) {
+    if (isPostgresConfigured()) return await PgSubscriptions.insert(doc);
+    return jsonSubscriptions.insert(doc);
+  },
+  async clear() {
+    if (isPostgresConfigured()) return await PgSubscriptions.clear();
+    return jsonSubscriptions.clear();
+  }
+};
+
+export const Documents = {
+  async findById(id) {
+    if (isPostgresConfigured()) return await PgDocuments.findById(id);
+    return jsonDocuments.findById(id);
+  },
+  async findAll(predicate) {
+    if (isPostgresConfigured()) return await PgDocuments.findAll(predicate);
+    return jsonDocuments.findAll(predicate);
+  },
+  async findOne(predicate) {
+    if (isPostgresConfigured()) return await PgDocuments.findOne(predicate);
+    return jsonDocuments.findOne(predicate);
+  },
+  async insert(doc) {
+    if (isPostgresConfigured()) return await PgDocuments.insert(doc);
+    return jsonDocuments.insert(doc);
+  },
+  async update(id, updates) {
+    if (isPostgresConfigured()) return await PgDocuments.update(id, updates);
+    return jsonDocuments.update(id, updates);
+  },
+  async delete(id) {
+    if (isPostgresConfigured()) return await PgDocuments.delete(id);
+    return jsonDocuments.delete(id);
+  },
+  async clear() {
+    if (isPostgresConfigured()) return await PgDocuments.clear();
+    return jsonDocuments.clear();
+  }
+};
+
+export const Items = {
+  async findById(id) {
+    if (isPostgresConfigured()) return await PgItems.findById(id);
+    return jsonItems.findById(id);
+  },
+  async findAll(predicate) {
+    if (isPostgresConfigured()) return await PgItems.findAll(predicate);
+    return jsonItems.findAll(predicate);
+  },
+  async findOne(predicate) {
+    if (isPostgresConfigured()) return await PgItems.findOne(predicate);
+    return jsonItems.findOne(predicate);
+  },
+  async count(predicate) {
+    if (isPostgresConfigured()) return await PgItems.count(predicate);
+    return jsonItems.count(predicate);
+  },
+  async insert(doc) {
+    if (isPostgresConfigured()) return await PgItems.insert(doc);
+    return jsonItems.insert(doc);
+  },
+  async update(id, updates) {
+    if (isPostgresConfigured()) return await PgItems.update(id, updates);
+    return jsonItems.update(id, updates);
+  },
+  async delete(id) {
+    if (isPostgresConfigured()) return await PgItems.delete(id);
+    return jsonItems.delete(id);
+  },
+  async clear() {
+    if (isPostgresConfigured()) return await PgItems.clear();
+    return jsonItems.clear();
+  }
+};
+
+export const Reminders = {
+  async findAll(predicate) {
+    if (isPostgresConfigured()) return await PgReminders.findAll(predicate);
+    return jsonReminders.findAll(predicate);
+  },
+  async findById(id) {
+    if (isPostgresConfigured()) return await PgReminders.findById(id);
+    return jsonReminders.findById(id);
+  },
+  async insert(doc) {
+    if (isPostgresConfigured()) return await PgReminders.insert(doc);
+    return jsonReminders.insert(doc);
+  },
+  async delete(id) {
+    if (isPostgresConfigured()) return await PgReminders.delete(id);
+    return jsonReminders.delete(id);
+  },
+  async clear() {
+    if (isPostgresConfigured()) return await PgReminders.clear();
+    return jsonReminders.clear();
+  }
+};

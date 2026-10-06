@@ -1,14 +1,23 @@
 import { Users, Subscriptions, Categories, Items, Documents, Reminders } from './db.js';
+import { isPostgresConfigured, initPostgresSchema } from './postgres.js';
 import { hashPassword } from '../utils/authUtils.js';
 
-export function runSeed(reset = false) {
+export async function runSeed(reset = false) {
+  if (isPostgresConfigured()) {
+    try {
+      await initPostgresSchema();
+    } catch (err) {
+      console.warn('[Seed] Aviso ao inicializar schema PostgreSQL:', err.message);
+    }
+  }
+
   if (reset) {
-    Users.clear();
-    Subscriptions.clear();
-    Categories.clear();
-    Items.clear();
-    Documents.clear();
-    Reminders.clear();
+    await Users.clear();
+    await Subscriptions.clear();
+    await Categories.clear();
+    await Items.clear();
+    await Documents.clear();
+    await Reminders.clear();
     console.log('[Seed] Banco de dados limpo com sucesso.');
   }
 
@@ -23,18 +32,19 @@ export function runSeed(reset = false) {
     { id: 'cat_geral', name: 'Geral & Diversos', icon: 'tag', color: '#6B7280', isSystem: true }
   ];
 
-  defaultCategories.forEach(cat => {
-    if (!Categories.findById(cat.id)) {
-      Categories.insert(cat);
+  for (const cat of defaultCategories) {
+    const existing = await Categories.findById(cat.id);
+    if (!existing) {
+      await Categories.insert(cat);
     }
-  });
+  }
 
   // 2. Usuário de Demonstração
   const demoEmail = 'demo@esquecimentozero.com.br';
-  let demoUser = Users.findOne(u => u.email === demoEmail);
+  let demoUser = await Users.findOne(u => u.email === demoEmail);
 
   if (!demoUser) {
-    demoUser = Users.insert({
+    demoUser = await Users.insert({
       id: 'usr_demo_esquecimento',
       name: 'Luciano Antigravity (Demonstração)',
       email: demoEmail,
@@ -46,9 +56,9 @@ export function runSeed(reset = false) {
   }
 
   // 3. Assinatura do Usuário Demo (Plano Gratuito)
-  let demoSub = Subscriptions.findOne(s => s.userId === demoUser.id);
+  let demoSub = await Subscriptions.findOne(s => s.userId === demoUser.id);
   if (!demoSub) {
-    demoSub = Subscriptions.insert({
+    demoSub = await Subscriptions.insert({
       id: 'sub_demo_free',
       userId: demoUser.id,
       plan: 'free',
@@ -64,9 +74,9 @@ export function runSeed(reset = false) {
   }
 
   // 4. Documento de Exemplo
-  let demoDoc = Documents.findOne(d => d.userId === demoUser.id);
+  let demoDoc = await Documents.findOne(d => d.userId === demoUser.id);
   if (!demoDoc) {
-    demoDoc = Documents.insert({
+    demoDoc = await Documents.insert({
       id: 'doc_demo_nf_samsung',
       userId: demoUser.id,
       fileName: 'Nota_Fiscal_Samsung_Crystal_UHD.pdf',
@@ -79,7 +89,7 @@ export function runSeed(reset = false) {
   }
 
   // 5. Itens Realistas com Prazos Variados
-  const existingItems = Items.findAll(i => i.userId === demoUser.id);
+  const existingItems = await Items.findAll(i => i.userId === demoUser.id);
   if (existingItems.length === 0) {
     const today = new Date();
 
@@ -90,7 +100,7 @@ export function runSeed(reset = false) {
     };
 
     // Item 1: Smart TV (Garantia terminando em 18 dias)
-    Items.insert({
+    await Items.insert({
       id: 'itm_tv_samsung',
       userId: demoUser.id,
       documentId: demoDoc.id,
@@ -109,7 +119,7 @@ export function runSeed(reset = false) {
     });
 
     // Item 2: Cafeteira (Garantia terminando em 45 dias)
-    Items.insert({
+    await Items.insert({
       id: 'itm_cafeteira_nespresso',
       userId: demoUser.id,
       documentId: null,
@@ -128,7 +138,7 @@ export function runSeed(reset = false) {
     });
 
     // Item 3: Medicamento (Validade em 5 dias - Crítico!)
-    Items.insert({
+    await Items.insert({
       id: 'itm_amoxicilina',
       userId: demoUser.id,
       documentId: null,
@@ -147,7 +157,7 @@ export function runSeed(reset = false) {
     });
 
     // Item 4: Suplemento (Validade em 24 dias)
-    Items.insert({
+    await Items.insert({
       id: 'itm_vitamina_d3',
       userId: demoUser.id,
       documentId: null,
@@ -173,5 +183,8 @@ export function runSeed(reset = false) {
 
 // Se executado diretamente via terminal
 if (process.argv[1] && process.argv[1].endsWith('seed.js')) {
-  runSeed();
+  runSeed().catch(err => {
+    console.error('[Seed Error]', err);
+    process.exit(1);
+  });
 }

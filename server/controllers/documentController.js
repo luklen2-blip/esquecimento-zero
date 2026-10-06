@@ -17,7 +17,7 @@ export const documentController = {
       const file = req.file;
       const relativePath = `/uploads/${file.filename}`;
 
-      const newDoc = Documents.insert({
+      const newDoc = await Documents.insert({
         userId: req.userId,
         fileName: file.originalname,
         fileType: file.mimetype,
@@ -47,7 +47,7 @@ export const documentController = {
    */
   async processDocument(req, res) {
     try {
-      const doc = Documents.findById(req.params.id);
+      const doc = await Documents.findById(req.params.id);
       if (!doc || doc.userId !== req.userId) {
         return res.status(404).json({
           success: false,
@@ -59,7 +59,7 @@ export const documentController = {
       const extraction = await ocrService.analyzeDocument(doc);
 
       // Atualiza documento com o texto bruto e status
-      Documents.update(doc.id, {
+      await Documents.update(doc.id, {
         ocrRawText: extraction.rawText,
         status: 'processed'
       });
@@ -87,8 +87,8 @@ export const documentController = {
    */
   async list(req, res) {
     try {
-      const docs = Documents.findAll(d => d.userId === req.userId)
-        .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+      const userDocs = await Documents.findAll(d => d.userId === req.userId);
+      const docs = [...userDocs].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
 
       return res.status(200).json({
         success: true,
@@ -109,7 +109,7 @@ export const documentController = {
    */
   async getById(req, res) {
     try {
-      const doc = Documents.findById(req.params.id);
+      const doc = await Documents.findById(req.params.id);
       if (!doc || doc.userId !== req.userId) {
         return res.status(404).json({
           success: false,

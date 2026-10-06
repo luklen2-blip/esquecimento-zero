@@ -38,7 +38,7 @@ export const authController = {
       }
 
       const normalizedEmail = email.trim().toLowerCase();
-      const existingUser = Users.findOne(u => u.email.toLowerCase() === normalizedEmail);
+      const existingUser = await Users.findOne(u => u.email.toLowerCase() === normalizedEmail);
 
       if (existingUser) {
         return res.status(409).json({
@@ -49,7 +49,7 @@ export const authController = {
 
       const passwordHash = hashPassword(password);
 
-      const newUser = Users.insert({
+      const newUser = await Users.insert({
         name: name.trim(),
         email: normalizedEmail,
         passwordHash,
@@ -58,7 +58,7 @@ export const authController = {
       });
 
       // Cria assinatura padrão do Plano Gratuito
-      const subscription = Subscriptions.insert({
+      const subscription = await Subscriptions.insert({
         userId: newUser.id,
         plan: 'free',
         status: 'active',
@@ -115,7 +115,7 @@ export const authController = {
       }
 
       const normalizedEmail = email.trim().toLowerCase();
-      const user = Users.findOne(u => u.email.toLowerCase() === normalizedEmail);
+      const user = await Users.findOne(u => u.email.toLowerCase() === normalizedEmail);
 
       if (!user || !verifyPassword(password, user.passwordHash)) {
         return res.status(401).json({
@@ -124,9 +124,9 @@ export const authController = {
         });
       }
 
-      let subscription = Subscriptions.findOne(s => s.userId === user.id);
+      let subscription = await Subscriptions.findOne(s => s.userId === user.id);
       if (!subscription) {
-        subscription = Subscriptions.insert({
+        subscription = await Subscriptions.insert({
           userId: user.id,
           plan: 'free',
           status: 'active',
@@ -169,7 +169,7 @@ export const authController = {
    */
   async me(req, res) {
     try {
-      const user = Users.findById(req.userId);
+      const user = await Users.findById(req.userId);
       if (!user) {
         return res.status(404).json({
           success: false,
@@ -177,9 +177,9 @@ export const authController = {
         });
       }
 
-      let subscription = Subscriptions.findOne(s => s.userId === user.id);
+      let subscription = await Subscriptions.findOne(s => s.userId === user.id);
       if (!subscription) {
-        subscription = Subscriptions.insert({
+        subscription = await Subscriptions.insert({
           userId: user.id,
           plan: 'free',
           status: 'active',
@@ -188,7 +188,7 @@ export const authController = {
         });
       }
 
-      const itemsCount = Items.count(i => i.userId === user.id);
+      const itemsCount = await Items.count(i => i.userId === user.id);
 
       return res.status(200).json({
         success: true,

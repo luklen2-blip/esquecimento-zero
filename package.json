@@ -8,11 +8,15 @@
     "start": "node server/server.js",
     "dev": "node --watch server/server.js",
     "test": "node tests/run_all.js",
-    "seed": "node server/database/seed.js"
+    "test:pg": "node tests/test_postgres_lifecycle.js",
+    "seed": "node server/database/seed.js",
+    "migrate": "node scripts/migrate_json_to_postgres.js",
+    "backup": "node scripts/backup_jsondb.js"
   },
   "dependencies": {
     "express": "^4.22.3",
-    "multer": "^2.4.0"
+    "multer": "^2.4.0",
+    "pg": "^8.23.1"
   },
   "keywords": [
     "produtividade",

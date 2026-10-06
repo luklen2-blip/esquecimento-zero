@@ -68,5 +68,55 @@
     "id": "use_1791241253883_85bdi",
     "createdAt": "2026-10-05T23:00:53.883Z",
     "updatedAt": "2026-10-05T23:00:53.883Z"
+  },
+  {
+    "name": "Novo Usuário Teste",
+    "email": "teste_1791243138352@esquecimentozero.com.br",
+    "passwordHash": "b5b69a8639d35eb27a69d0659f7992c8:87a48cd4784d285b15d6d35c611243edf75bb4580bc4697c252fd93293303c0f0965e38a4fe596f3d0c6fa85275cc98277fba42829a4d6827dbf41735dc48d64",
+    "role": "user",
+    "termsAcceptedAt": "2026-10-05T23:32:18.451Z",
+    "id": "use_1791243138451_po0w7",
+    "createdAt": "2026-10-05T23:32:18.451Z",
+    "updatedAt": "2026-10-05T23:32:18.451Z"
+  },
+  {
+    "name": "Novo Usuário Teste",
+    "email": "teste_1791244175242@esquecimentozero.com.br",
+    "passwordHash": "5e4ee53554ef4ee13f27b5ade89a9fa9:db8cce54daf45a6e71b409202bceed35089af9ab5e56cd89b71b305ffafd23478acbddac747c26336537482e39943d3d9ca800a855fd509fe0e36dbce32445c8",
+    "role": "user",
+    "termsAcceptedAt": "2026-10-05T23:49:35.358Z",
+    "id": "use_1791244175358_26f04",
+    "createdAt": "2026-10-05T23:49:35.358Z",
+    "updatedAt": "2026-10-05T23:49:35.358Z"
+  },
+  {
+    "name": "Novo Usuário Teste",
+    "email": "teste_1791244303760@esquecimentozero.com.br",
+    "passwordHash": "5c31a9c777d5fff9a09df7e94e93dc8b:1910678299a8f32502f493d02c253325e853fceecde51530dd5fe68053228f06ecdb7baba3d2c376418c056a4295b389de203699734ee001d335e0a1b50b3ea1",
+    "role": "user",
+    "termsAcceptedAt": "2026-10-05T23:51:43.906Z",
+    "id": "use_1791244303907_ngmyy",
+    "createdAt": "2026-10-05T23:51:43.907Z",
+    "updatedAt": "2026-10-05T23:51:43.907Z"
+  },
+  {
+    "name": "Novo Usuário Teste",
+    "email": "teste_1791245396699@esquecimentozero.com.br",
+    "passwordHash": "580014098ed3927ea808858c8c559a49:86fd0ffb0612ca6b2ba39bdb06c6b8afc00acd7f8014d0507f1d9b2785d92240f9825920d0e356e6b2bb8a06a14da4df2cb195212025d674b721a8956eaa06e3",
+    "role": "user",
+    "termsAcceptedAt": "2026-10-06T00:09:56.864Z",
+    "id": "use_1791245396865_n9un0",
+    "createdAt": "2026-10-06T00:09:56.865Z",
+    "updatedAt": "2026-10-06T00:09:56.865Z"
+  },
+  {
+    "name": "Novo Usuário Teste",
+    "email": "teste_1791245526775@esquecimentozero.com.br",
+    "passwordHash": "da09cf892a40c8f4f102092d1207ac52:c692dc1a215621727e565ff43d834b19cc6360b5c2f4ec03cb9498e8fe62d3b3142db149f76d506b9526cac8f7b1ee3b74e5cd33944281592059b443833438c9",
+    "role": "user",
+    "termsAcceptedAt": "2026-10-06T00:12:06.892Z",
+    "id": "use_1791245526893_j135u",
+    "createdAt": "2026-10-06T00:12:06.893Z",
+    "updatedAt": "2026-10-06T00:12:06.893Z"
   }
 ]

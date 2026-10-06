@@ -69,13 +69,17 @@ router.get('/items', requireAuth, itemController.list);
 router.delete('/items/:id', requireAuth, itemController.delete);
 
 // Categorias disponíveis
-router.get('/categories', requireAuth, (req, res) => {
-  const list = Categories.findAll(c => c.isSystem || c.userId === req.userId);
-  res.json({
-    success: true,
-    data: list,
-    timestamp: new Date().toISOString()
-  });
+router.get('/categories', requireAuth, async (req, res) => {
+  try {
+    const list = await Categories.findAll(c => c.isSystem || c.userId === req.userId);
+    res.json({
+      success: true,
+      data: list,
+      timestamp: new Date().toISOString()
+    });
+  } catch (err) {
+    res.status(500).json({ success: false, error: { message: err.message } });
+  }
 });
 
 export default router;

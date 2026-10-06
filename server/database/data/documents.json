@@ -58,5 +58,65 @@
     "id": "doc_1791241253908_fmoim",
     "createdAt": "2026-10-05T23:00:53.908Z",
     "updatedAt": "2026-10-05T23:00:53.945Z"
+  },
+  {
+    "userId": "use_1791243138451_po0w7",
+    "fileName": "NotaFiscal_Teste.pdf",
+    "fileType": "application/pdf",
+    "fileSize": 47,
+    "filePath": "/uploads/1791243138486_3rqix_NotaFiscal_Teste.pdf",
+    "status": "processed",
+    "ocrRawText": "[OCR PROCESSADO] DANFE NOTA FISCAL ELETRONICA\nEMITENTE: Estabelecimento Comercial\nDESTINATARIO: CONSUMIDOR FINAL\nITEM: Fiscal Teste\nVALOR TOTAL: R$ 199.90\nGARANTIA ESTIMADA: 12 MESES",
+    "id": "doc_1791243138497_q9204",
+    "createdAt": "2026-10-05T23:32:18.497Z",
+    "updatedAt": "2026-10-05T23:32:18.577Z"
+  },
+  {
+    "userId": "use_1791244175358_26f04",
+    "fileName": "NotaFiscal_Teste.pdf",
+    "fileType": "application/pdf",
+    "fileSize": 47,
+    "filePath": "/uploads/1791244175390_hhwug_NotaFiscal_Teste.pdf",
+    "status": "processed",
+    "ocrRawText": "[OCR PROCESSADO] DANFE NOTA FISCAL ELETRONICA\nEMITENTE: Estabelecimento Comercial\nDESTINATARIO: CONSUMIDOR FINAL\nITEM: Fiscal Teste\nVALOR TOTAL: R$ 199.90\nGARANTIA ESTIMADA: 12 MESES",
+    "id": "doc_1791244175404_t9fwn",
+    "createdAt": "2026-10-05T23:49:35.404Z",
+    "updatedAt": "2026-10-05T23:49:35.439Z"
+  },
+  {
+    "userId": "use_1791244303907_ngmyy",
+    "fileName": "NotaFiscal_Teste.pdf",
+    "fileType": "application/pdf",
+    "fileSize": 47,
+    "filePath": "/uploads/1791244303946_uteb9_NotaFiscal_Teste.pdf",
+    "status": "processed",
+    "ocrRawText": "[OCR PROCESSADO] DANFE NOTA FISCAL ELETRONICA\nEMITENTE: Estabelecimento Comercial\nDESTINATARIO: CONSUMIDOR FINAL\nITEM: Fiscal Teste\nVALOR TOTAL: R$ 199.90\nGARANTIA ESTIMADA: 12 MESES",
+    "id": "doc_1791244303964_9hh2j",
+    "createdAt": "2026-10-05T23:51:43.964Z",
+    "updatedAt": "2026-10-05T23:51:43.997Z"
+  },
+  {
+    "userId": "use_1791245396865_n9un0",
+    "fileName": "NotaFiscal_Teste.pdf",
+    "fileType": "application/pdf",
+    "fileSize": 47,
+    "filePath": "/uploads/1791245396898_yanvk_NotaFiscal_Teste.pdf",
+    "status": "processed",
+    "ocrRawText": "[OCR PROCESSADO] DANFE NOTA FISCAL ELETRONICA\nEMITENTE: Estabelecimento Comercial\nDESTINATARIO: CONSUMIDOR FINAL\nITEM: Fiscal Teste\nVALOR TOTAL: R$ 199.90\nGARANTIA ESTIMADA: 12 MESES",
+    "id": "doc_1791245396914_57pny",
+    "createdAt": "2026-10-06T00:09:56.914Z",
+    "updatedAt": "2026-10-06T00:09:56.948Z"
+  },
+  {
+    "userId": "use_1791245526893_j135u",
+    "fileName": "NotaFiscal_Teste.pdf",
+    "fileType": "application/pdf",
+    "fileSize": 47,
+    "filePath": "/uploads/1791245526929_ph40s_NotaFiscal_Teste.pdf",
+    "status": "processed",
+    "ocrRawText": "[OCR PROCESSADO] DANFE NOTA FISCAL ELETRONICA\nEMITENTE: Estabelecimento Comercial\nDESTINATARIO: CONSUMIDOR FINAL\nITEM: Fiscal Teste\nVALOR TOTAL: R$ 199.90\nGARANTIA ESTIMADA: 12 MESES",
+    "id": "doc_1791245526944_8scku",
+    "createdAt": "2026-10-06T00:12:06.944Z",
+    "updatedAt": "2026-10-06T00:12:06.980Z"
   }
 ]

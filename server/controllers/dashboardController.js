@@ -10,15 +10,15 @@ export const dashboardController = {
       const now = new Date();
 
       // Busca apenas itens pertencentes ao usuário logado
-      const userItems = Items.findAll(i => i.userId === userId);
-      const userDocs = Documents.findAll(d => d.userId === userId);
-      const subscription = Subscriptions.findOne(s => s.userId === userId) || {
+      const userItems = await Items.findAll(i => i.userId === userId);
+      const userDocs = await Documents.findAll(d => d.userId === userId);
+      const subscription = (await Subscriptions.findOne(s => s.userId === userId)) || {
         plan: 'free',
         itemsLimit: 10,
         status: 'active'
       };
 
-      const categories = Categories.findAll(c => c.isSystem || c.userId === userId);
+      const categories = await Categories.findAll(c => c.isSystem || c.userId === userId);
       const categoryMap = new Map(categories.map(c => [c.id, c]));
 
       // 1. Garantias próximas do fim (próximos 60 dias)

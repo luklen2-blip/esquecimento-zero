@@ -14,7 +14,7 @@ const PORT = process.env.PORT || 3333;
 const APP_NAME = process.env.APP_NAME || 'Esquecimento Zero';
 
 // Inicializa sementes de banco (categorias e demo user)
-runSeed(false);
+runSeed(false).catch(err => console.error('[Server Seed Error]', err.message));
 
 // Middlewares Globais de Segurança e Parsing
 app.use(applySecurityHeaders);

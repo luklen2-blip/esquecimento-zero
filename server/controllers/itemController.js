@@ -30,12 +30,12 @@ export const itemController = {
       }
 
       // Verificação de cota do plano
-      const subscription = Subscriptions.findOne(s => s.userId === userId) || {
+      const subscription = (await Subscriptions.findOne(s => s.userId === userId)) || {
         plan: 'free',
         itemsLimit: 10
       };
 
-      const currentItemCount = Items.count(i => i.userId === userId);
+      const currentItemCount = await Items.count(i => i.userId === userId);
       const isUnlimited = subscription.itemsLimit === -1;
 
       if (!isUnlimited && currentItemCount >= subscription.itemsLimit) {
@@ -50,13 +50,13 @@ export const itemController = {
 
       // Validação de documento vinculado
       if (documentId) {
-        const doc = Documents.findById(documentId);
+        const doc = await Documents.findById(documentId);
         if (doc && doc.userId === userId) {
-          Documents.update(doc.id, { status: 'processed' });
+          await Documents.update(doc.id, { status: 'processed' });
         }
       }
 
-      const newItem = Items.insert({
+      const newItem = await Items.insert({
         userId,
         documentId: documentId || null,
         categoryId: categoryId || 'cat_geral',
@@ -76,7 +76,7 @@ export const itemController = {
       // Criação de lembrete automático preventivo
       const triggerTarget = warrantyEndDate || expirationDate;
       if (triggerTarget) {
-        Reminders.insert({
+        await Reminders.insert({
           userId,
           itemId: newItem.id,
           title: `Alerta: Prazo de ${newItem.title}`,
@@ -105,10 +105,10 @@ export const itemController = {
    */
   async list(req, res) {
     try {
-      const items = Items.findAll(i => i.userId === req.userId)
-        .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+      const userItems = await Items.findAll(i => i.userId === req.userId);
+      const items = [...userItems].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
 
-      const categories = Categories.findAll(c => c.isSystem || c.userId === req.userId);
+      const categories = await Categories.findAll(c => c.isSystem || c.userId === req.userId);
       const catMap = new Map(categories.map(c => [c.id, c]));
 
       const enriched = items.map(item => {
@@ -140,7 +140,7 @@ export const itemController = {
    */
   async delete(req, res) {
     try {
-      const item = Items.findById(req.params.id);
+      const item = await Items.findById(req.params.id);
       if (!item || item.userId !== req.userId) {
         return res.status(404).json({
           success: false,
@@ -148,11 +148,13 @@ export const itemController = {
         });
       }
 
-      Items.delete(item.id);
+      await Items.delete(item.id);
 
       // Remove lembretes vinculados
-      const userReminders = Reminders.findAll(r => r.itemId === item.id);
-      userReminders.forEach(r => Reminders.delete(r.id));
+      const userReminders = await Reminders.findAll(r => r.itemId === item.id);
+      for (const r of userReminders) {
+        await Reminders.delete(r.id);
+      }
 
       return res.status(200).json({
         success: true,

@@ -15,3 +15,5 @@ services:
         value: "Esquecimento Zero"
       - key: PORT
         value: 3000
+      - key: DATABASE_URL
+        sync: false

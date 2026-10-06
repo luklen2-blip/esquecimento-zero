@@ -69,7 +69,7 @@ async function runTestSuite() {
   console.log('================================================================\n');
 
   // Garante dados semente prontos
-  runSeed(false);
+  await runSeed(false);
 
   // Inicia servidor em porta de teste
   await new Promise((resolve) => {
