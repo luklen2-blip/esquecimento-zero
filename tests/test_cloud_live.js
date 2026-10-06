@@ -46,6 +46,18 @@ async function validateLive() {
       console.error('   ❌ Falha no carregamento do SPA');
     }
 
+    // 3. Configurações Comerciais e Link Kiwify
+    console.log('3. Verificando /api/commercial/config...');
+    const comm = await requestLive(`${targetUrl}/api/commercial/config`);
+    if (comm.statusCode === 200 && comm.body.data?.checkoutUrl === 'https://pay.kiwify.com.br/cd5quHM') {
+      console.log('   ✅ Modelo Comercial e Link Kiwify homologados ao vivo na nuvem!');
+      console.log('   🔗 Checkout Kiwify:', comm.body.data.checkoutUrl);
+      console.log('   💰 Preço Vitalício:', `R$ ${comm.body.data.priceBrl.toFixed(2)}`);
+      console.log('   ⏱️ Período de Teste:', `${comm.body.data.trialDays} dias`);
+    } else {
+      console.error('   ❌ Falha na validação do modelo comercial ao vivo');
+    }
+
     console.log('\n🎉 VALIDAÇÃO AO VIVO CONCLUÍDA COM SUCESSO!\n');
   } catch (err) {
     console.error('❌ Erro na validação remota:', err.message);
