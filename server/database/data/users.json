@@ -3,10 +3,10 @@
     "id": "usr_demo_esquecimento",
     "name": "Luciano Antigravity (Demonstração)",
     "email": "demo@esquecimentozero.com.br",
-    "passwordHash": "e17fb459d374c19bd564a67d17dbe6bc:b0639bf25c77fb7b86d6b9b35435af747db4924bde4c30b688412e5bf6f889ec5963e8eb74672dd0c053f89300d58078e56687a89a2ae6fcc850272e447ad3ed",
+    "passwordHash": "2a7a6b12db58316bcfcf5286639f1395:cc787d550be210404f0988670db30c259fd7ad4205901e31d5e4240d5b969729dd8578ab5cec005baa6a22685f0e859315acba2e389dcccb1ea5a2f121a0c26b",
     "role": "user",
-    "termsAcceptedAt": "2026-10-06T01:24:42.402Z",
-    "createdAt": "2026-10-06T01:24:42.402Z",
-    "updatedAt": "2026-10-06T01:24:42.402Z"
+    "termsAcceptedAt": "2026-10-06T01:38:10.904Z",
+    "createdAt": "2026-10-06T01:38:10.904Z",
+    "updatedAt": "2026-10-06T01:38:10.904Z"
   }
 ]

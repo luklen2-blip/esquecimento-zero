@@ -283,7 +283,7 @@ export async function initAdicionarEvents() {
               <p class="text-[11px] text-rose-700">Seus registros anteriores continuam seguros. Para cadastrar novos itens, ative seu Acesso Vitalício por R$ 19,90 (pagamento único).</p>
             </div>
           </div>
-          <a href="${access.checkoutUrl || 'https://pay.kiwify.com.br/cd5quHM'}" target="_blank" rel="noopener noreferrer" class="px-4 py-2 bg-gradient-to-r from-amber-400 to-orange-400 hover:from-amber-300 hover:to-orange-300 text-slate-950 text-xs font-black rounded-xl whitespace-nowrap shadow-md flex items-center gap-1.5">
+          <a href="${access.checkoutUrl || 'https://pay.kiwify.com.br/YXjfu2x'}" target="_blank" rel="noopener noreferrer" class="px-4 py-2 bg-gradient-to-r from-amber-400 to-orange-400 hover:from-amber-300 hover:to-orange-300 text-slate-950 text-xs font-black rounded-xl whitespace-nowrap shadow-md flex items-center gap-1.5">
             <i data-lucide="zap" class="w-3.5 h-3.5"></i>
             <span>Ativar Vitalício (R$ 19,90)</span>
           </a>

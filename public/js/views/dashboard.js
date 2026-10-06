@@ -64,7 +64,7 @@ function renderDashboardContent(container, data, user) {
   const isExpired = access.isExpired;
   const isTrial = access.isTrial || !isLifetime;
   const daysRemaining = access.daysRemaining ?? metrics.trialDaysRemaining ?? 7;
-  const checkoutUrl = access.checkoutUrl || metrics.checkoutUrl || 'https://pay.kiwify.com.br/cd5quHM';
+  const checkoutUrl = access.checkoutUrl || metrics.checkoutUrl || 'https://pay.kiwify.com.br/YXjfu2x';
 
   let commercialBannerHtml = '';
 

@@ -49,7 +49,7 @@ async function validateLive() {
     // 3. Configurações Comerciais e Link Kiwify
     console.log('3. Verificando /api/commercial/config...');
     const comm = await requestLive(`${targetUrl}/api/commercial/config`);
-    if (comm.statusCode === 200 && comm.body.data?.checkoutUrl === 'https://pay.kiwify.com.br/cd5quHM') {
+    if (comm.statusCode === 200 && comm.body.data?.checkoutUrl === 'https://pay.kiwify.com.br/YXjfu2x') {
       console.log('   ✅ Modelo Comercial e Link Kiwify homologados ao vivo na nuvem!');
       console.log('   🔗 Checkout Kiwify:', comm.body.data.checkoutUrl);
       console.log('   💰 Preço Vitalício:', `R$ ${comm.body.data.priceBrl.toFixed(2)}`);

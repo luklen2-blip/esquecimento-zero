@@ -67,7 +67,7 @@ async function runCommercialTests() {
     // 1. Configurações Comerciais Centrais
     console.log('📌 [1/7] Testando Configurações Comerciais Centrais:');
     assert(
-      COMMERCIAL_CONFIG.LIFETIME_CHECKOUT_URL === 'https://pay.kiwify.com.br/cd5quHM',
+      COMMERCIAL_CONFIG.LIFETIME_CHECKOUT_URL === 'https://pay.kiwify.com.br/YXjfu2x',
       'URL oficial de checkout Kiwify centralizada corretamente'
     );
     assert(COMMERCIAL_CONFIG.LIFETIME_PRICE_BRL === 19.90, 'Preço vitalício configurado como R$ 19,90');
@@ -76,7 +76,7 @@ async function runCommercialTests() {
     const configRes = await makeRequest('GET', '/api/commercial/config');
     assert(configRes.statusCode === 200, 'Endpoint público /api/commercial/config responde HTTP 200');
     assert(
-      configRes.body.data.checkoutUrl === 'https://pay.kiwify.com.br/cd5quHM',
+      configRes.body.data.checkoutUrl === 'https://pay.kiwify.com.br/YXjfu2x',
       'URL Kiwify entregue aos clientes via API pública'
     );
 
@@ -102,7 +102,7 @@ async function runCommercialTests() {
     assert(meRes.body.data.access.isExpired === false, 'Teste reportado como não expirado');
     assert(meRes.body.data.access.daysRemaining === 7, 'Contador informa 7 dias restantes');
     assert(
-      meRes.body.data.commercial.checkoutUrl === 'https://pay.kiwify.com.br/cd5quHM',
+      meRes.body.data.commercial.checkoutUrl === 'https://pay.kiwify.com.br/YXjfu2x',
       'Link Kiwify presente no perfil do usuário'
     );
 
@@ -144,7 +144,7 @@ async function runCommercialTests() {
     assert(blockedItemRes.statusCode === 403, 'Criação de item bloqueada com HTTP 403 após expiração');
     assert(blockedItemRes.body.error.code === 'TRIAL_EXPIRED', 'Código de erro padronizado TRIAL_EXPIRED retornado');
     assert(
-      blockedItemRes.body.error.checkoutUrl === 'https://pay.kiwify.com.br/cd5quHM',
+      blockedItemRes.body.error.checkoutUrl === 'https://pay.kiwify.com.br/YXjfu2x',
       'Link Kiwify oficial enviado na mensagem de bloqueio'
     );
 

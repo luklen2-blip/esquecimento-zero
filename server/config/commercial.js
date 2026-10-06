@@ -4,7 +4,7 @@
 
 export const COMMERCIAL_CONFIG = {
   // Link oficial de checkout Kiwify
-  LIFETIME_CHECKOUT_URL: 'https://pay.kiwify.com.br/cd5quHM',
+  LIFETIME_CHECKOUT_URL: 'https://pay.kiwify.com.br/YXjfu2x',
 
   // Preço comercial do Acesso Vitalício (pagamento único)
   LIFETIME_PRICE_BRL: 19.90,

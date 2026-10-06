@@ -5,15 +5,15 @@
     "plan": "free",
     "status": "active",
     "itemsLimit": 10,
-    "trialStartedAt": "2026-10-06T01:24:42.407Z",
-    "trialEndsAt": "2026-10-13T01:24:42.407Z",
+    "trialStartedAt": "2026-10-06T01:38:10.912Z",
+    "trialEndsAt": "2026-10-13T01:38:10.912Z",
     "features": {
       "aiProcessing": false,
       "unlimitedItems": false,
       "advancedReminders": false,
       "exportData": false
     },
-    "createdAt": "2026-10-06T01:24:42.407Z",
-    "updatedAt": "2026-10-06T01:24:42.407Z"
+    "createdAt": "2026-10-06T01:38:10.912Z",
+    "updatedAt": "2026-10-06T01:38:10.912Z"
   }
 ]

@@ -58,5 +58,25 @@
     "id": "pay_1791249829979_q2fvi",
     "createdAt": "2026-10-06T01:23:49.979Z",
     "updatedAt": "2026-10-06T01:23:49.979Z"
+  },
+  {
+    "orderId": "kiwify_order_1791250675564",
+    "provider": "kiwify",
+    "userId": "use_1791250675454_dq8gc",
+    "customerEmail": "comercial_1791250675183@teste.com",
+    "amountCents": 1990,
+    "status": "paid",
+    "payload": {
+      "order_id": "kiwify_order_1791250675564",
+      "order_status": "paid",
+      "order_amount": 1990,
+      "Customer": {
+        "email": "comercial_1791250675183@teste.com",
+        "name": "Cliente em Teste"
+      }
+    },
+    "id": "pay_1791250675574_juhq8",
+    "createdAt": "2026-10-06T01:37:55.574Z",
+    "updatedAt": "2026-10-06T01:37:55.574Z"
   }
 ]

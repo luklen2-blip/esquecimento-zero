@@ -186,7 +186,7 @@ export function initPerfilEvents() {
 }
 
 export function renderPlanos() {
-  const KIWIFY_CHECKOUT_URL = 'https://pay.kiwify.com.br/cd5quHM';
+  const KIWIFY_CHECKOUT_URL = 'https://pay.kiwify.com.br/YXjfu2x';
 
   return `
     <div class="view-enter max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
