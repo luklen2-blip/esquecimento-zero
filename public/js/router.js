@@ -11,6 +11,7 @@ import {
   initPerfilEvents,
   renderPlanos
 } from './views/placeholders.js';
+import { renderGuia } from './views/guia.js';
 
 const routes = {
   '/': { title: 'Esquecimento Zero', render: () => '', isProtected: false },
@@ -23,6 +24,8 @@ const routes = {
   '/historico': { title: 'Histórico de Documentos - Esquecimento Zero', render: renderHistorico, init: initHistoricoEvents, isProtected: true },
   '/perfil': { title: 'Meu Perfil - Esquecimento Zero', render: renderPerfil, init: initPerfilEvents, isProtected: true },
   '/planos': { title: 'Planos e Preços - Esquecimento Zero', render: renderPlanos, isProtected: false },
+  '/como-usar': { title: 'Como Usar no Dia a Dia - Esquecimento Zero', render: renderGuia, isProtected: false },
+  '/guia': { title: 'Como Usar no Dia a Dia - Esquecimento Zero', render: renderGuia, isProtected: false },
   '/termos': { title: 'Termos de Uso - Esquecimento Zero', render: renderTerms, isProtected: false },
   '/privacidade': { title: 'Política de Privacidade - Esquecimento Zero', render: renderPrivacy, isProtected: false }
 };

@@ -492,6 +492,25 @@ function renderDashboardContent(container, data, user) {
           </div>
         </div>
 
+        <!-- Card Informativo: Como Usar no Dia a Dia -->
+        <div class="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200/80 rounded-2xl p-5 shadow-sm space-y-3">
+          <div class="flex items-start gap-3">
+            <div class="w-10 h-10 rounded-xl bg-brand-600 text-white flex items-center justify-center flex-shrink-0 shadow-md shadow-brand-500/20">
+              <i data-lucide="book-open" class="w-5 h-5"></i>
+            </div>
+            <div>
+              <h4 class="text-sm font-bold text-slate-900 leading-tight">Como usar no seu dia a dia?</h4>
+              <p class="text-xs text-slate-600 mt-1 leading-relaxed">
+                Guia rápido com 15 passos para organizar suas informações importantes e não depender apenas da memória.
+              </p>
+            </div>
+          </div>
+          <a href="/como-usar" class="inline-flex items-center justify-center gap-1.5 w-full py-2 bg-white hover:bg-slate-100 text-brand-700 font-bold text-xs rounded-xl border border-brand-200 shadow-sm transition-all">
+            <span>Acessar Guia do Usuário</span>
+            <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+          </a>
+        </div>
+
       </div>
 
     </div>
