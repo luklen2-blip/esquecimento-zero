@@ -2,12 +2,15 @@ import { COMMERCIAL_CONFIG } from '../config/commercial.js';
 import { Subscriptions, Users } from '../database/db.js';
 
 /**
- * Calcula o status de acesso comercial do usuário
+ * Calcula o status de acesso comercial do usuário no modelo de 24 HORAS de teste
  * @param {Object} subscription Registro de assinatura do usuário
  * @param {Object} [user] Dados do usuário (opcional para fallback de datas)
- * @returns {Object} Diagnóstico de acesso comercial
+ * @returns {Object} Diagnóstico de acesso comercial com contador baseado no servidor e avisos progressivos
  */
 export function getAccessStatus(subscription, user = null) {
+  const serverNow = new Date();
+  const serverNowMs = serverNow.getTime();
+
   // 1. Acesso Vitalício Ativo
   if (subscription && subscription.plan === COMMERCIAL_CONFIG.PLANS.LIFETIME && subscription.status === COMMERCIAL_CONFIG.STATUS.ACTIVE) {
     return {
@@ -17,37 +20,117 @@ export function getAccessStatus(subscription, user = null) {
       isLifetime: true,
       isTrial: false,
       isExpired: false,
-      daysRemaining: null,
       trialStartedAt: subscription.trialStartedAt || null,
-      trialEndsAt: subscription.trialEndsAt || null,
+      trialEndsAt: null,
       lifetimeActivatedAt: subscription.lifetimeActivatedAt || null,
       statusText: 'Vitalício Ativo',
+      serverTime: serverNow.toISOString(),
+      diffMs: 0,
+      hoursRemaining: null,
+      minutesRemaining: null,
       checkoutUrl: COMMERCIAL_CONFIG.LIFETIME_CHECKOUT_URL,
-      priceBrl: COMMERCIAL_CONFIG.LIFETIME_PRICE_BRL
+      priceBrl: COMMERCIAL_CONFIG.LIFETIME_PRICE_BRL,
+      notice: {
+        stage: 'lifetime',
+        headline: '⭐ ACESSO VITALÍCIO ATIVO',
+        message: 'Você possui acesso permanente com armazenamento e processamento de IA ilimitados.',
+        countdownText: 'Acesso vitalício permanente ativo',
+        badgeText: '👑 VITALÍCIO',
+        ctaText: null
+      }
     };
   }
 
-  // 2. Período de Teste Gratuito (7 dias)
-  const now = Date.now();
+  // 2. Período de Teste Gratuito de 24 Horas Corridas a partir do Cadastro
+  let trialStartedMs;
   let trialEndsMs;
+
+  if (subscription && subscription.trialStartedAt) {
+    trialStartedMs = new Date(subscription.trialStartedAt).getTime();
+  } else if (subscription && subscription.createdAt) {
+    trialStartedMs = new Date(subscription.createdAt).getTime();
+  } else if (user && user.createdAt) {
+    trialStartedMs = new Date(user.createdAt).getTime();
+  } else {
+    trialStartedMs = serverNowMs;
+  }
 
   if (subscription && subscription.trialEndsAt) {
     trialEndsMs = new Date(subscription.trialEndsAt).getTime();
-  } else if (subscription && subscription.trialStartedAt) {
-    trialEndsMs = new Date(subscription.trialStartedAt).getTime() + (COMMERCIAL_CONFIG.TRIAL_DAYS * 24 * 60 * 60 * 1000);
-  } else if (subscription && subscription.createdAt) {
-    trialEndsMs = new Date(subscription.createdAt).getTime() + (COMMERCIAL_CONFIG.TRIAL_DAYS * 24 * 60 * 60 * 1000);
-  } else if (user && user.createdAt) {
-    trialEndsMs = new Date(user.createdAt).getTime() + (COMMERCIAL_CONFIG.TRIAL_DAYS * 24 * 60 * 60 * 1000);
   } else {
-    trialEndsMs = now + (COMMERCIAL_CONFIG.TRIAL_DAYS * 24 * 60 * 60 * 1000);
+    trialEndsMs = trialStartedMs + COMMERCIAL_CONFIG.TRIAL_DURATION_MS;
   }
 
-  const diffMs = trialEndsMs - now;
-  // Considera dias restantes arredondando para cima: se falta 1 hora, resta 1 dia
-  const daysRemaining = Math.max(0, Math.ceil(diffMs / (1000 * 60 * 60 * 24)));
+  const diffMs = trialEndsMs - serverNowMs;
   const isExpired = diffMs <= 0 || (subscription && subscription.status === COMMERCIAL_CONFIG.STATUS.EXPIRED);
   const hasAccess = !isExpired;
+
+  const totalSecondsRemaining = Math.max(0, Math.floor(diffMs / 1000));
+  const hoursRemaining = Math.floor(totalSecondsRemaining / 3600);
+  const minutesRemaining = Math.floor((totalSecondsRemaining % 3600) / 60);
+
+  // 3. Comunicação Progressiva de Conversão (5 Estágios)
+  let notice;
+  let countdownText;
+  let badgeText;
+
+  if (isExpired) {
+    countdownText = '🔒 Seu período gratuito terminou.';
+    badgeText = '🔒 Período Terminou';
+    notice = {
+      stage: 'expired',
+      headline: '🔒 Seu período gratuito terminou.',
+      message: 'Continue usando o Esquecimento Zero com acesso vitalício. R$ 19,90 Pagamento único. Sem mensalidade. Sem renovação.',
+      countdownText,
+      badgeText,
+      ctaText: 'QUERO MEU ACESSO VITALÍCIO'
+    };
+  } else if (hoursRemaining < 1) {
+    countdownText = `🔥 Seu teste termina em ${minutesRemaining} minuto${minutesRemaining === 1 ? '' : 's'}.`;
+    badgeText = `🔥 ${minutesRemaining} min restantes`;
+    notice = {
+      stage: 'last_hour',
+      headline: '🚨 Seu teste termina em menos de 1 hora.',
+      message: 'Garanta agora seu acesso vitalício por R$ 19,90.',
+      countdownText,
+      badgeText,
+      ctaText: 'GARANTIR MEU ACESSO VITALÍCIO'
+    };
+  } else if (hoursRemaining <= 3) {
+    countdownText = `⚠️ Você tem: ${hoursRemaining}h ${minutesRemaining}min restantes`;
+    badgeText = `⚠️ ${hoursRemaining}h ${minutesRemaining}min restantes`;
+    notice = {
+      stage: 'urgent_3h',
+      headline: `⚠️ Restam apenas ${hoursRemaining} horas do seu teste gratuito.`,
+      message: 'Não perca seu acesso. Acesso vitalício por R$ 19,90.',
+      countdownText,
+      badgeText,
+      ctaText: 'GARANTIR MEU ACESSO VITALÍCIO'
+    };
+  } else if (hoursRemaining <= 12) {
+    countdownText = `⏰ Você tem: ${hoursRemaining}h ${minutesRemaining}min restantes`;
+    badgeText = `⏰ ${hoursRemaining}h ${minutesRemaining}min restantes`;
+    notice = {
+      stage: 'warning_12h',
+      headline: `⏰ Seu teste gratuito termina em ${hoursRemaining} horas.`,
+      message: 'Gostou do Esquecimento Zero? Garanta seu acesso vitalício por R$ 19,90.',
+      countdownText,
+      badgeText,
+      ctaText: 'GARANTIR MEU ACESSO VITALÍCIO'
+    };
+  } else {
+    // Início do teste (24h a 12h restantes)
+    countdownText = `🎁 TESTE GRATUITO Você tem: ${hoursRemaining}h ${minutesRemaining}min restantes`;
+    badgeText = `🎁 ${hoursRemaining}h ${minutesRemaining}min restantes`;
+    notice = {
+      stage: 'initial_24h',
+      headline: '🎁 Você ganhou 24 horas grátis!',
+      message: 'Experimente o Esquecimento Zero e descubra como manter suas informações importantes organizadas. Você pode adquirir o acesso vitalício por apenas R$ 19,90.',
+      countdownText,
+      badgeText,
+      ctaText: 'GARANTIR MEU ACESSO VITALÍCIO'
+    };
+  }
 
   return {
     hasAccess,
@@ -56,18 +139,23 @@ export function getAccessStatus(subscription, user = null) {
     isLifetime: false,
     isTrial: true,
     isExpired,
-    daysRemaining,
-    trialStartedAt: (subscription && (subscription.trialStartedAt || subscription.createdAt)) || (user && user.createdAt) || new Date().toISOString(),
+    trialStartedAt: new Date(trialStartedMs).toISOString(),
     trialEndsAt: new Date(trialEndsMs).toISOString(),
     lifetimeActivatedAt: null,
-    statusText: isExpired ? 'Teste Expirado' : `Teste Gratuito (${daysRemaining} dia${daysRemaining === 1 ? '' : 's'} restante${daysRemaining === 1 ? '' : 's'})`,
+    serverTime: serverNow.toISOString(),
+    diffMs: Math.max(0, diffMs),
+    hoursRemaining,
+    minutesRemaining,
+    statusText: badgeText,
+    countdownText,
     checkoutUrl: COMMERCIAL_CONFIG.LIFETIME_CHECKOUT_URL,
-    priceBrl: COMMERCIAL_CONFIG.LIFETIME_PRICE_BRL
+    priceBrl: COMMERCIAL_CONFIG.LIFETIME_PRICE_BRL,
+    notice
   };
 }
 
 /**
- * Middleware para bloquear operações de criação caso o teste gratuito tenha expirado
+ * Middleware para bloquear operações de criação caso o teste gratuito de 24 horas tenha expirado
  */
 export async function requireActiveAccess(req, res, next) {
   try {
@@ -90,9 +178,11 @@ export async function requireActiveAccess(req, res, next) {
         success: false,
         error: {
           code: 'TRIAL_EXPIRED',
-          message: 'Seu período de teste gratuito de 7 dias expirou. Adquira o Acesso Vitalício por apenas R$ 19,90 para continuar cadastrando registros.',
+          headline: access.notice.headline,
+          message: access.notice.message,
           checkoutUrl: COMMERCIAL_CONFIG.LIFETIME_CHECKOUT_URL,
-          priceBrl: COMMERCIAL_CONFIG.LIFETIME_PRICE_BRL
+          priceBrl: COMMERCIAL_CONFIG.LIFETIME_PRICE_BRL,
+          ctaText: access.notice.ctaText
         }
       });
     }

@@ -67,24 +67,26 @@ async function runCommercialTests() {
     // 1. Configurações Comerciais Centrais
     console.log('📌 [1/7] Testando Configurações Comerciais Centrais:');
     assert(
-      COMMERCIAL_CONFIG.LIFETIME_CHECKOUT_URL === 'https://pay.kiwify.com.br/YXjfu2x',
-      'URL oficial de checkout Kiwify centralizada corretamente'
+      COMMERCIAL_CONFIG.LIFETIME_CHECKOUT_URL === 'https://pay.kiwify.com.br/cd5quHM',
+      'URL oficial de checkout Kiwify centralizada corretamente como cd5quHM'
     );
     assert(COMMERCIAL_CONFIG.LIFETIME_PRICE_BRL === 19.90, 'Preço vitalício configurado como R$ 19,90');
-    assert(COMMERCIAL_CONFIG.TRIAL_DAYS === 7, 'Período padrão de teste configurado como 7 dias');
+    assert(COMMERCIAL_CONFIG.TRIAL_HOURS === 24, 'Período padrão de teste configurado como 24 horas');
+    assert(COMMERCIAL_CONFIG.TRIAL_DURATION_MS === 24 * 60 * 60 * 1000, 'Duração do teste configurada em milissegundos exatos (86.400.000 ms)');
 
     const configRes = await makeRequest('GET', '/api/commercial/config');
     assert(configRes.statusCode === 200, 'Endpoint público /api/commercial/config responde HTTP 200');
     assert(
-      configRes.body.data.checkoutUrl === 'https://pay.kiwify.com.br/YXjfu2x',
-      'URL Kiwify entregue aos clientes via API pública'
+      configRes.body.data.checkoutUrl === 'https://pay.kiwify.com.br/cd5quHM',
+      'URL Kiwify cd5quHM entregue aos clientes via API pública'
     );
+    assert(configRes.body.data.trialHours === 24, 'trialHours retornado como 24');
 
-    // 2. Cadastro e Ativação do Teste Gratuito de 7 Dias
-    console.log('\n📌 [2/7] Testando Cadastro e Início do Teste Gratuito de 7 Dias:');
+    // 2. Cadastro e Ativação do Teste Gratuito de 24 Horas
+    console.log('\n📌 [2/7] Testando Cadastro e Início do Teste Gratuito de 24 Horas:');
     const trialUserEmail = `comercial_${Date.now()}@teste.com`;
     const regRes = await makeRequest('POST', '/api/auth/register', {
-      name: 'Cliente em Teste',
+      name: 'Cliente em Teste 24h',
       email: trialUserEmail,
       password: 'senhaSegura123',
       termsAccepted: true
@@ -100,18 +102,20 @@ async function runCommercialTests() {
     assert(meRes.body.data.access.hasAccess === true, 'Usuário possui acesso ativo no início do teste');
     assert(meRes.body.data.access.isTrial === true, 'Usuário identificado em período de teste');
     assert(meRes.body.data.access.isExpired === false, 'Teste reportado como não expirado');
-    assert(meRes.body.data.access.daysRemaining === 7, 'Contador informa 7 dias restantes');
+    assert(meRes.body.data.access.hoursRemaining >= 23, 'Contador informa 23-24 horas restantes');
+    assert(Boolean(meRes.body.data.access.serverTime), 'serverTime presente para sincronização anti-fraude');
+    assert(meRes.body.data.access.notice.stage === 'initial_24h', 'Aviso progressivo estágio inicial (24h a 12h)');
     assert(
-      meRes.body.data.commercial.checkoutUrl === 'https://pay.kiwify.com.br/YXjfu2x',
-      'Link Kiwify presente no perfil do usuário'
+      meRes.body.data.commercial.checkoutUrl === 'https://pay.kiwify.com.br/cd5quHM',
+      'Link Kiwify oficial presente no perfil do usuário'
     );
 
-    // Validação de cálculo das datas de teste
+    // Validação de cálculo das datas de teste (exatas 24 horas corridas sem arredondamentos)
     const sub = await Subscriptions.findByUserId(trialUserId);
     const startMs = new Date(sub.trialStartedAt).getTime();
     const endMs = new Date(sub.trialEndsAt).getTime();
-    const diffDays = Math.round((endMs - startMs) / (1000 * 60 * 60 * 24));
-    assert(diffDays === 7, 'Diferença entre início e fim do teste é de exatamente 7 dias');
+    const diffHours = (endMs - startMs) / (1000 * 60 * 60);
+    assert(diffHours === 24, 'Diferença entre início e fim do teste é de exatamente 24 horas corridas');
 
     // 3. Criação de Itens Permitida durante o Teste
     console.log('\n📌 [3/7] Testando Operações Permitidas durante o Teste Gratuito:');
@@ -123,18 +127,19 @@ async function runCommercialTests() {
     assert(itemRes.statusCode === 201, 'Criação de item permitida durante o teste (HTTP 201)');
     const createdItemId = itemRes.body.data.id;
 
-    // 4. Bloqueio Suave após Expiração dos 7 Dias (Sem Excluir Dados)
+    // 4. Bloqueio Suave após Expiração das 24 Horas (Sem Excluir Dados)
     console.log('\n📌 [4/7] Testando Bloqueio Suave após Expiração do Teste:');
-    // Simula expiração alterando trialEndsAt para o passado (8 dias atrás)
-    const eightDaysAgo = new Date(Date.now() - (8 * 24 * 60 * 60 * 1000)).toISOString();
+    // Simula expiração alterando trialEndsAt para o passado (1 hora atrás)
+    const oneHourAgo = new Date(Date.now() - (60 * 60 * 1000)).toISOString();
     await Subscriptions.updateByUserId(trialUserId, {
-      trialEndsAt: eightDaysAgo
+      trialEndsAt: oneHourAgo
     });
 
     const expiredMeRes = await makeRequest('GET', '/api/auth/me', null, { Authorization: `Bearer ${trialToken}` });
     assert(expiredMeRes.body.data.access.hasAccess === false, 'Acesso revogado após expiração');
     assert(expiredMeRes.body.data.access.isExpired === true, 'Status marcado como expirado');
-    assert(expiredMeRes.body.data.access.daysRemaining === 0, 'Dias restantes zerados');
+    assert(expiredMeRes.body.data.access.hoursRemaining === 0, 'Horas restantes zeradas');
+    assert(expiredMeRes.body.data.access.notice.stage === 'expired', 'Estágio do aviso marcado como expired');
 
     // Tentativa de criar item DEVE ser bloqueada com 403 TRIAL_EXPIRED
     const blockedItemRes = await makeRequest('POST', '/api/items', {
@@ -144,8 +149,8 @@ async function runCommercialTests() {
     assert(blockedItemRes.statusCode === 403, 'Criação de item bloqueada com HTTP 403 após expiração');
     assert(blockedItemRes.body.error.code === 'TRIAL_EXPIRED', 'Código de erro padronizado TRIAL_EXPIRED retornado');
     assert(
-      blockedItemRes.body.error.checkoutUrl === 'https://pay.kiwify.com.br/YXjfu2x',
-      'Link Kiwify oficial enviado na mensagem de bloqueio'
+      blockedItemRes.body.error.checkoutUrl === 'https://pay.kiwify.com.br/cd5quHM',
+      'Link Kiwify oficial cd5quHM enviado na mensagem de bloqueio'
     );
 
     // 5. Preservação de Dados de Usuários Expirados (Modo Somente Leitura)
@@ -215,7 +220,8 @@ async function runCommercialTests() {
     assert(fraudRegRes.statusCode === 201, 'Cadastro de usuário efetuado');
     // O backend DEVE ignorar o plano injetado e aplicar apenas o teste gratuito
     const fraudSub = await Subscriptions.findByUserId(fraudRegRes.body.data.user.id);
-    assert(fraudSub.plan === 'free', 'Injeção de plan=lifetime no payload de cadastro foi ignorada');
+    assert(fraudSub.plan === 'trial' || fraudSub.plan === 'free', 'Injeção de plan=lifetime no payload de cadastro foi ignorada');
+    assert(fraudSub.plan !== 'lifetime', 'Plano lifetime rejeitado categoricamente');
     assert(!fraudSub.lifetimeActivatedAt, 'lifetimeActivatedAt permaneceu nulo');
 
     console.log('\n================================================================');

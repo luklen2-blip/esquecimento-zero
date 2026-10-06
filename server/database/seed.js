@@ -58,7 +58,7 @@ export async function runSeed(reset = false) {
   // 3. Assinatura do Usuário Demo (Plano Gratuito com 7 Dias de Teste)
   let demoSub = await Subscriptions.findOne(s => s.userId === demoUser.id);
   const now = new Date();
-  const trialEnds = new Date(now.getTime() + (7 * 24 * 60 * 60 * 1000));
+  const trialEnds = new Date(now.getTime() + (24 * 60 * 60 * 1000));
   if (!demoSub) {
     demoSub = await Subscriptions.insert({
       id: 'sub_demo_free',

@@ -59,13 +59,13 @@ export const authController = {
         termsAcceptedAt: new Date().toISOString()
       });
 
-      // Cria assinatura padrão com Período de Teste Gratuito de 7 Dias
+      // Cria assinatura padrão com Período de Teste Gratuito de 24 Horas
       const now = new Date();
-      const trialEnds = new Date(now.getTime() + (COMMERCIAL_CONFIG.TRIAL_DAYS * 24 * 60 * 60 * 1000));
+      const trialEnds = new Date(now.getTime() + COMMERCIAL_CONFIG.TRIAL_DURATION_MS);
 
       const subscription = await Subscriptions.insert({
         userId: newUser.id,
-        plan: 'free',
+        plan: 'trial',
         status: 'active',
         itemsLimit: 10,
         trialStartedAt: now.toISOString(),
@@ -143,10 +143,10 @@ export const authController = {
       let subscription = await Subscriptions.findOne(s => s.userId === user.id);
       if (!subscription) {
         const now = new Date();
-        const trialEnds = new Date(now.getTime() + (COMMERCIAL_CONFIG.TRIAL_DAYS * 24 * 60 * 60 * 1000));
+        const trialEnds = new Date(now.getTime() + COMMERCIAL_CONFIG.TRIAL_DURATION_MS);
         subscription = await Subscriptions.insert({
           userId: user.id,
-          plan: 'free',
+          plan: user.email === 'demo@esquecimentozero.com.br' ? 'free' : 'trial',
           status: 'active',
           itemsLimit: 10,
           trialStartedAt: now.toISOString(),
@@ -209,10 +209,10 @@ export const authController = {
       let subscription = await Subscriptions.findOne(s => s.userId === user.id);
       if (!subscription) {
         const now = new Date();
-        const trialEnds = new Date(now.getTime() + (COMMERCIAL_CONFIG.TRIAL_DAYS * 24 * 60 * 60 * 1000));
+        const trialEnds = new Date(now.getTime() + COMMERCIAL_CONFIG.TRIAL_DURATION_MS);
         subscription = await Subscriptions.insert({
           userId: user.id,
-          plan: 'free',
+          plan: user.email === 'demo@esquecimentozero.com.br' ? 'free' : 'trial',
           status: 'active',
           itemsLimit: 10,
           trialStartedAt: now.toISOString(),

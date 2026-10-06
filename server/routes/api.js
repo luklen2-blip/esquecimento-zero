@@ -89,7 +89,8 @@ router.get('/commercial/config', (req, res) => {
     data: {
       checkoutUrl: COMMERCIAL_CONFIG.LIFETIME_CHECKOUT_URL,
       priceBrl: COMMERCIAL_CONFIG.LIFETIME_PRICE_BRL,
-      trialDays: COMMERCIAL_CONFIG.TRIAL_DAYS
+      trialDays: COMMERCIAL_CONFIG.TRIAL_DAYS,
+      trialHours: COMMERCIAL_CONFIG.TRIAL_HOURS
     },
     timestamp: new Date().toISOString()
   });

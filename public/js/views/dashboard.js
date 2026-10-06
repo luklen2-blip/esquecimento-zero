@@ -24,6 +24,7 @@ export async function initDashboardEvents() {
     const user = userRes?.data?.user || { name: 'Usuário' };
 
     renderDashboardContent(container, data, user);
+    setupTrialCountdownTicker(data.access);
   } catch (err) {
     container.innerHTML = `
       <div class="bg-rose-50 border border-rose-200 rounded-2xl p-6 text-center max-w-lg mx-auto">
@@ -63,8 +64,10 @@ function renderDashboardContent(container, data, user) {
   const isLifetime = access.isLifetime || metrics.plan === 'lifetime';
   const isExpired = access.isExpired;
   const isTrial = access.isTrial || !isLifetime;
-  const daysRemaining = access.daysRemaining ?? metrics.trialDaysRemaining ?? 7;
-  const checkoutUrl = access.checkoutUrl || metrics.checkoutUrl || 'https://pay.kiwify.com.br/YXjfu2x';
+  const hoursRemaining = access.hoursRemaining ?? 24;
+  const minutesRemaining = access.minutesRemaining ?? 0;
+  const checkoutUrl = access.checkoutUrl || metrics.checkoutUrl || 'https://pay.kiwify.com.br/cd5quHM';
+  const notice = access.notice || {};
 
   let commercialBannerHtml = '';
 
@@ -87,56 +90,103 @@ function renderDashboardContent(container, data, user) {
     `;
   } else if (isExpired) {
     commercialBannerHtml = `
-      <div class="bg-gradient-to-r from-rose-950 via-slate-900 to-rose-900 text-white rounded-2xl p-5 sm:p-6 shadow-xl border-2 border-rose-500/50 flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div class="bg-gradient-to-r from-rose-950 via-slate-900 to-rose-900 text-white rounded-2xl p-5 sm:p-6 shadow-xl border-2 border-rose-500/60 flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div class="flex items-start gap-3.5">
           <div class="w-11 h-11 rounded-2xl bg-rose-500/20 text-rose-400 flex items-center justify-center flex-shrink-0">
             <i data-lucide="lock" class="w-6 h-6"></i>
           </div>
           <div>
             <div class="flex items-center gap-2">
-              <h3 class="text-base font-black text-white">Seu Teste Gratuito de 7 Dias Expirou</h3>
-              <span class="px-2 py-0.5 rounded-full text-[10px] font-black bg-rose-500/30 text-rose-300 uppercase">Acesso Pausado</span>
+              <h3 class="text-base font-black text-white">🔒 Seu período gratuito terminou.</h3>
+              <span class="px-2.5 py-0.5 rounded-full text-[10px] font-black bg-rose-500/30 text-rose-300 uppercase border border-rose-500/40">Acesso Pausado</span>
             </div>
             <p class="text-xs sm:text-sm text-slate-300 mt-1 max-w-xl">
-              Todos os seus registros e documentos continuam salvos com segurança. Para continuar cadastrando itens e usando a IA, ative seu <strong>Acesso Vitalício por R$ 19,90 (pagamento único)</strong>.
+              Todos os seus registros continuam salvos com segurança. Para continuar cadastrando novos itens e utilizando a IA, garanta seu acesso vitalício por <strong>R$ 19,90 (pagamento único)</strong>.
             </p>
+            <div class="mt-2.5">
+              <div id="trial-countdown-text" class="px-3 py-1.5 rounded-xl bg-rose-950/80 border border-rose-500/50 text-xs sm:text-sm font-black text-rose-300 inline-flex items-center gap-1.5">
+                🔒 Seu período gratuito terminou.
+              </div>
+            </div>
           </div>
         </div>
         <a href="${checkoutUrl}" target="_blank" rel="noopener noreferrer"
-          class="px-5 py-3 bg-gradient-to-r from-amber-400 to-orange-400 hover:from-amber-300 hover:to-orange-300 text-slate-950 font-black text-xs sm:text-sm rounded-xl shadow-lg shadow-amber-400/20 flex items-center justify-center gap-2 flex-shrink-0 transition-transform hover:scale-105">
+          class="px-5 py-3.5 bg-gradient-to-r from-amber-400 to-orange-400 hover:from-amber-300 hover:to-orange-300 text-slate-950 font-black text-xs sm:text-sm rounded-xl shadow-lg shadow-amber-400/25 flex items-center justify-center gap-2 flex-shrink-0 transition-transform hover:scale-105 whitespace-nowrap">
           <i data-lucide="zap" class="w-4 h-4"></i>
-          <span>Ativar Vitalício (R$ 19,90)</span>
+          <span>QUERO MEU ACESSO VITALÍCIO — R$ 19,90</span>
         </a>
       </div>
     `;
-  } else if (isTrial) {
-    const isUrgent = daysRemaining <= 3;
+  } else {
+    // 5 Estágios progressivos de conversão no teste de 24 horas
+    let bannerBorder = 'border-indigo-500/30';
+    let bannerBg = 'bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900';
+    let iconBg = 'bg-brand-500/20 text-brand-400';
+    let iconName = 'gift';
+    let badgeClasses = 'bg-brand-500/20 text-brand-300 border border-brand-500/30';
+
+    if (notice.stage === 'last_hour') {
+      bannerBorder = 'border-2 border-rose-500/80 animate-pulse';
+      bannerBg = 'bg-gradient-to-r from-rose-950 via-slate-900 to-orange-950';
+      iconBg = 'bg-rose-500/20 text-rose-400';
+      iconName = 'flame';
+      badgeClasses = 'bg-rose-500/30 text-rose-300 border border-rose-500/40 animate-pulse';
+    } else if (notice.stage === 'urgent_3h') {
+      bannerBorder = 'border-2 border-amber-500/70';
+      bannerBg = 'bg-gradient-to-r from-amber-950 via-slate-900 to-orange-950';
+      iconBg = 'bg-amber-500/20 text-amber-400';
+      iconName = 'alert-triangle';
+      badgeClasses = 'bg-amber-500/30 text-amber-300 border border-amber-500/40';
+    } else if (notice.stage === 'warning_12h') {
+      bannerBorder = 'border border-amber-500/40';
+      bannerBg = 'bg-gradient-to-r from-slate-900 via-amber-950/40 to-slate-900';
+      iconBg = 'bg-amber-500/20 text-amber-400';
+      iconName = 'clock';
+      badgeClasses = 'bg-amber-400/20 text-amber-300 border border-amber-400/30';
+    }
+
+    const headline = notice.headline || 'Período de Teste Gratuito de 24 Horas';
+    const message = notice.message || 'Cadastre seus itens e conheça o sistema. Garanta seu Acesso Vitalício por apenas R$ 19,90.';
+    const badgeText = notice.badge || '24H GRÁTIS';
+
     commercialBannerHtml = `
-      <div class="${isUrgent ? 'bg-gradient-to-r from-amber-950 via-slate-900 to-orange-950 border-amber-500/50' : 'bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 border-indigo-500/30'} text-white rounded-2xl p-4 sm:p-5 shadow-sm border flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-        <div class="flex items-center gap-3">
-          <div class="w-10 h-10 rounded-xl ${isUrgent ? 'bg-amber-500/20 text-amber-400' : 'bg-brand-500/20 text-brand-400'} flex items-center justify-center flex-shrink-0">
-            <i data-lucide="${isUrgent ? 'clock' : 'sparkles'}" class="w-5 h-5"></i>
+      <div class="${bannerBg} ${bannerBorder} text-white rounded-2xl p-5 sm:p-6 shadow-xl flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div class="flex items-start gap-3.5">
+          <div class="w-11 h-11 rounded-2xl ${iconBg} flex items-center justify-center flex-shrink-0">
+            <i data-lucide="${iconName}" class="w-6 h-6"></i>
           </div>
           <div>
-            <div class="flex items-center gap-2">
-              <span class="text-xs sm:text-sm font-extrabold">${isUrgent ? '⚠️ Período de Teste Quase no Fim' : 'Período de Teste Gratuito'}</span>
-              <span class="px-2 py-0.5 rounded-full text-[10px] font-bold ${isUrgent ? 'bg-amber-400/20 text-amber-300' : 'bg-brand-400/20 text-brand-300'}">
-                ${daysRemaining === 0 ? 'Último dia hoje' : `Resta${daysRemaining === 1 ? '' : 'm'} ${daysRemaining} dia${daysRemaining === 1 ? '' : 's'}`}
-              </span>
+            <div class="flex items-center gap-2 flex-wrap">
+              <h3 class="text-base font-black text-white">${headline}</h3>
+              <span class="px-2.5 py-0.5 rounded-full text-[10px] font-black ${badgeClasses} uppercase">${badgeText}</span>
             </div>
-            <p class="text-xs text-slate-300 mt-0.5">
-              Garanta seu Acesso Vitalício permanente por apenas <strong>R$ 19,90 (pagamento único)</strong> sem mensalidades.
+            <p class="text-xs sm:text-sm text-slate-300 mt-1 max-w-xl">
+              ${message}
             </p>
+            <div class="mt-2.5">
+              <div id="trial-countdown-text" class="px-3 py-1.5 rounded-xl bg-black/40 border border-white/10 text-xs sm:text-sm font-bold text-amber-300 inline-flex items-center gap-1.5">
+                ${hoursRemaining >= 1
+                  ? `⏳ Seu teste gratuito termina em <strong>${hoursRemaining} hora${hoursRemaining > 1 ? 's' : ''} e ${minutesRemaining} min</strong>`
+                  : `🔥 Seu teste gratuito termina em <strong>${minutesRemaining} minutos</strong>`
+                }
+              </div>
+            </div>
           </div>
         </div>
         <a href="${checkoutUrl}" target="_blank" rel="noopener noreferrer"
-          class="px-4 py-2.5 ${isUrgent ? 'bg-amber-400 hover:bg-amber-300 text-slate-950 font-black' : 'bg-white/10 hover:bg-white/20 text-white font-bold'} text-xs rounded-xl flex items-center justify-center gap-1.5 transition-all flex-shrink-0">
-          <span>Garantir Vitalício por R$ 19,90</span>
-          <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+          class="px-5 py-3.5 bg-gradient-to-r from-amber-400 to-orange-400 hover:from-amber-300 hover:to-orange-300 text-slate-950 font-black text-xs sm:text-sm rounded-xl shadow-lg shadow-amber-400/25 flex items-center justify-center gap-2 flex-shrink-0 transition-transform hover:scale-105 whitespace-nowrap">
+          <i data-lucide="zap" class="w-4 h-4"></i>
+          <span>QUERO MEU ACESSO VITALÍCIO — R$ 19,90</span>
         </a>
       </div>
     `;
   }
+
+  const userBadgeText = isLifetime
+    ? 'Acesso Vitalício'
+    : isExpired
+    ? 'Teste Expirado'
+    : (hoursRemaining >= 1 ? `Teste (${hoursRemaining}h)` : `Teste (<1h)`);
 
   container.innerHTML = `
     <!-- Banner Comercial de Status -->
@@ -151,7 +201,7 @@ function renderDashboardContent(container, data, user) {
             isLifetime ? 'bg-emerald-100 text-emerald-800 border border-emerald-300' : isExpired ? 'bg-rose-100 text-rose-800 border border-rose-300' : 'bg-amber-100 text-amber-800 border border-amber-300'
           }">
             <i data-lucide="${isLifetime ? 'crown' : isExpired ? 'lock' : 'sparkles'}" class="w-3 h-3"></i>
-            ${isLifetime ? 'Acesso Vitalício' : isExpired ? 'Teste Expirado' : `Teste (${daysRemaining}d)`}
+            ${userBadgeText}
           </span>
         </div>
         <p class="text-xs sm:text-sm text-slate-500 mt-1">
@@ -450,4 +500,51 @@ function renderDashboardContent(container, data, user) {
   if (window.lucide) {
     window.lucide.createIcons({ root: container });
   }
+}
+
+function setupTrialCountdownTicker(access) {
+  if (window.__trialTickerInterval) {
+    clearInterval(window.__trialTickerInterval);
+    window.__trialTickerInterval = null;
+  }
+
+  if (!access || access.isLifetime || !access.trialEndsAt) {
+    return;
+  }
+
+  const serverBase = access.serverTime ? new Date(access.serverTime).getTime() : Date.now();
+  const localBase = Date.now();
+  const serverDelta = localBase - serverBase;
+  const targetEndTime = new Date(access.trialEndsAt).getTime();
+
+  function update() {
+    const countdownEl = document.getElementById('trial-countdown-text');
+    if (!countdownEl) return;
+
+    const currentServerTime = Date.now() - serverDelta;
+    const remainingMs = targetEndTime - currentServerTime;
+
+    if (remainingMs <= 0) {
+      countdownEl.innerHTML = `🔒 Seu período gratuito terminou.`;
+      countdownEl.className = 'px-3 py-1.5 rounded-xl bg-rose-950/80 border border-rose-500/50 text-xs sm:text-sm font-black text-rose-300 inline-flex items-center gap-1.5';
+      return;
+    }
+
+    const totalSeconds = Math.floor(remainingMs / 1000);
+    const totalMinutes = Math.floor(totalSeconds / 60);
+    const hours = Math.floor(totalMinutes / 60);
+    const minutes = totalMinutes % 60;
+    const seconds = totalSeconds % 60;
+
+    if (hours >= 1) {
+      countdownEl.innerHTML = `⏳ Seu teste gratuito termina em <strong>${hours} hora${hours > 1 ? 's' : ''} e ${minutes} min</strong>`;
+      countdownEl.className = 'px-3 py-1.5 rounded-xl bg-black/40 border border-white/10 text-xs sm:text-sm font-bold text-amber-300 inline-flex items-center gap-1.5';
+    } else {
+      countdownEl.innerHTML = `🔥 Seu teste gratuito termina em <strong>${minutes} min e ${seconds}s</strong>`;
+      countdownEl.className = 'px-3 py-1.5 rounded-xl bg-rose-900/60 border border-rose-400/50 text-xs sm:text-sm font-black text-rose-200 inline-flex items-center gap-1.5 animate-pulse';
+    }
+  }
+
+  update();
+  window.__trialTickerInterval = setInterval(update, 1000);
 }

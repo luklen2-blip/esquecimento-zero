@@ -186,47 +186,47 @@ export function initPerfilEvents() {
 }
 
 export function renderPlanos() {
-  const KIWIFY_CHECKOUT_URL = 'https://pay.kiwify.com.br/YXjfu2x';
+  const KIWIFY_CHECKOUT_URL = 'https://pay.kiwify.com.br/cd5quHM';
 
   return `
     <div class="view-enter max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       
       <div class="text-center max-w-xl mx-auto mb-8">
-        <span class="text-xs font-bold uppercase tracking-wider text-brand-600">Modelo Comercial Transparente</span>
-        <h1 class="text-2xl sm:text-3xl font-black text-slate-900 mt-1">Acesso ao Esquecimento Zero</h1>
+        <span class="text-xs font-bold uppercase tracking-wider text-brand-600">ESQUECIMENTO ZERO</span>
+        <h1 class="text-2xl sm:text-3xl font-black text-slate-900 mt-1">Modelo Comercial Simples e Transparente</h1>
         <p class="text-xs sm:text-sm text-slate-500 mt-2">
-          Experimente grátis por 7 dias completos. Desbloqueie o acesso permanente sem mensalidades nem anuidades.
+          Experimente gratuitamente por 24 horas corridas e garanta seu acesso permanente sem mensalidades.
         </p>
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto items-stretch">
         
-        <!-- Card 1: Teste Gratuito de 7 Dias -->
+        <!-- Card 1: Teste Grátis por 24 Horas -->
         <div class="bg-white rounded-2xl border-2 border-slate-200 p-6 sm:p-8 flex flex-col justify-between shadow-sm hover:border-slate-300 transition-all">
           <div>
             <div class="flex items-center justify-between mb-4">
-              <span class="px-3 py-1 rounded-full text-xs font-bold bg-slate-100 text-slate-700">7 Dias de Teste</span>
+              <span class="px-3 py-1 rounded-full text-xs font-bold bg-slate-100 text-slate-700">🎁 TESTE GRÁTIS</span>
               <span class="text-xs font-semibold text-emerald-600 font-mono">Sem Cartão</span>
             </div>
-            <h2 class="text-2xl font-black text-slate-900">Teste Gratuito</h2>
+            <h2 class="text-2xl font-black text-slate-900">Teste Grátis por 24 Horas</h2>
             <div class="my-4">
               <span class="text-4xl font-extrabold text-slate-900">R$ 0</span>
-              <span class="text-xs text-slate-500 font-medium">/ 7 dias de avaliação</span>
+              <span class="text-xs text-slate-500 font-medium ml-1">/ 24 horas corridas</span>
             </div>
-            <p class="text-xs text-slate-600 mb-6">Comece imediatamente no cadastro e conheça o sistema por completo.</p>
+            <p class="text-xs text-slate-600 mb-6">Experimente o sistema por 24 horas corridas a partir do momento do seu cadastro.</p>
 
             <ul class="space-y-3 text-xs text-slate-700">
               <li class="flex items-center gap-2.5">
                 <i data-lucide="check" class="w-4 h-4 text-emerald-600 flex-shrink-0"></i>
-                <span><strong>7 dias completos</strong> de acesso irrestrito</span>
+                <span><strong>24 horas corridas</strong> de acesso irrestrito</span>
               </li>
               <li class="flex items-center gap-2.5">
                 <i data-lucide="check" class="w-4 h-4 text-emerald-600 flex-shrink-0"></i>
-                <span>Cadastro de <strong>até 10 itens</strong> para teste</span>
+                <span><strong>Sem cartão de crédito</strong> no cadastro</span>
               </li>
               <li class="flex items-center gap-2.5">
                 <i data-lucide="check" class="w-4 h-4 text-emerald-600 flex-shrink-0"></i>
-                <span>Painel de vencimentos e prazos prioritários</span>
+                <span>Cadastre itens e conheça o sistema</span>
               </li>
               <li class="flex items-center gap-2.5">
                 <i data-lucide="check" class="w-4 h-4 text-emerald-600 flex-shrink-0"></i>
@@ -234,7 +234,7 @@ export function renderPlanos() {
               </li>
               <li class="flex items-center gap-2.5 text-slate-500">
                 <i data-lucide="info" class="w-4 h-4 text-amber-500 flex-shrink-0"></i>
-                <span>Após 7 dias: somente leitura até ativação do vitalício</span>
+                <span>Após 24h: dados preservados em modo leitura até ativação</span>
               </li>
             </ul>
           </div>
@@ -254,36 +254,40 @@ export function renderPlanos() {
 
           <div>
             <div class="flex items-center justify-between mb-4">
-              <span class="px-3 py-1 rounded-full text-xs font-bold bg-amber-400/20 text-amber-300 border border-amber-400/30">💎 Acesso Vitalício</span>
+              <span class="px-3 py-1 rounded-full text-xs font-bold bg-amber-400/20 text-amber-300 border border-amber-400/30">⭐ ACESSO VITALÍCIO</span>
               <span class="text-xs font-bold text-amber-400">Sem Mensalidade</span>
             </div>
-            <h2 class="text-2xl font-black text-white">Permanente</h2>
+            <h2 class="text-2xl font-black text-white">Acesso Vitalício</h2>
             <div class="my-4">
               <span class="text-4xl font-extrabold text-amber-400">R$ 19,90</span>
-              <span class="text-xs text-slate-300 font-medium ml-1">pagamento único</span>
+              <span class="text-xs text-slate-300 font-medium ml-1">apenas R$ 19,90 (pagamento único)</span>
             </div>
-            <p class="text-xs text-slate-300 mb-6">Pague apenas uma vez e utilize para sempre. Sem mensalidades e sem renovação oculta.</p>
+            <p class="text-xs text-slate-300 mb-6">Pague apenas uma vez e utilize para sempre. Sem mensalidade e sem anuidade.</p>
 
             <ul class="space-y-3 text-xs text-slate-200">
               <li class="flex items-center gap-2.5">
                 <i data-lucide="check" class="w-4 h-4 text-amber-400 flex-shrink-0"></i>
-                <span><strong>Acesso permanente vitalício</strong> sem expiração</span>
+                <span><strong>Apenas R$ 19,90</strong> (pagamento único)</span>
               </li>
               <li class="flex items-center gap-2.5">
                 <i data-lucide="check" class="w-4 h-4 text-amber-400 flex-shrink-0"></i>
-                <span><strong>Itens e notas fiscais ilimitados</strong></span>
+                <span><strong>Sem mensalidade</strong> e <strong>sem anuidade</strong></span>
               </li>
               <li class="flex items-center gap-2.5">
                 <i data-lucide="check" class="w-4 h-4 text-amber-400 flex-shrink-0"></i>
-                <span><strong>Processamento inteligente por IA / OCR</strong> contínuo</span>
+                <span><strong>Acesso permanente</strong> vitalício</span>
               </li>
               <li class="flex items-center gap-2.5">
                 <i data-lucide="check" class="w-4 h-4 text-amber-400 flex-shrink-0"></i>
-                <span>Lembretes e alertas prioritários de garantia e validade</span>
+                <span><strong>Itens e documentos ilimitados</strong></span>
               </li>
               <li class="flex items-center gap-2.5">
                 <i data-lucide="check" class="w-4 h-4 text-amber-400 flex-shrink-0"></i>
-                <span>Seus dados salvos em segurança e nunca excluídos</span>
+                <span><strong>Processamento contínuo</strong> por IA</span>
+              </li>
+              <li class="flex items-center gap-2.5">
+                <i data-lucide="check" class="w-4 h-4 text-amber-400 flex-shrink-0"></i>
+                <span><strong>Seus dados preservados</strong> e protegidos</span>
               </li>
             </ul>
           </div>
@@ -292,10 +296,10 @@ export function renderPlanos() {
             <a href="${KIWIFY_CHECKOUT_URL}" target="_blank" rel="noopener noreferrer"
               class="w-full py-3.5 bg-gradient-to-r from-amber-400 to-orange-400 hover:from-amber-300 hover:to-orange-300 text-slate-950 font-black text-xs sm:text-sm rounded-xl shadow-lg shadow-amber-400/25 transition-all flex items-center justify-center gap-2">
               <i data-lucide="zap" class="w-4 h-4"></i>
-              <span>Garantir Acesso Vitalício (R$ 19,90)</span>
+              <span>QUERO MEU ACESSO VITALÍCIO</span>
             </a>
             <p class="text-[10px] text-center text-slate-400">
-              🔒 Checkout 100% seguro pela Kiwify • Garantia legal de 7 dias (CDC) • Maiores de 18 anos
+              🔒 Checkout oficial Kiwify • PIX e Cartão • Pagamento único sem renovação
             </p>
           </div>
         </div>
