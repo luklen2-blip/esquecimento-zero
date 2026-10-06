@@ -58,6 +58,24 @@ async function validateLive() {
       console.error('   ❌ Falha na validação do modelo comercial ao vivo:', comm.body);
     }
 
+    // 4. Central de Alertas SPA (/lembretes)
+    console.log('4. Verificando Central de Alertas Frontend (/lembretes)...');
+    const lembretesSpa = await requestLive(`${targetUrl}/lembretes`);
+    if (lembretesSpa.statusCode === 200 && typeof lembretesSpa.body === 'string' && lembretesSpa.body.includes('Esquecimento Zero')) {
+      console.log('   ✅ Rota /lembretes servida com sucesso pelo fallback SPA.');
+    } else {
+      console.error('   ❌ Falha no acesso à rota /lembretes');
+    }
+
+    // 5. Endpoint de Lembretes Protegido (/api/reminders)
+    console.log('5. Verificando Proteção da API (/api/reminders)...');
+    const remUnauth = await requestLive(`${targetUrl}/api/reminders`);
+    if (remUnauth.statusCode === 401) {
+      console.log('   ✅ Endpoint /api/reminders ativo e protegido por JWT (HTTP 401 para requisição sem token).');
+    } else {
+      console.error('   ❌ Endpoint /api/reminders respondeu inesperadamente:', remUnauth.statusCode);
+    }
+
     console.log('\n🎉 VALIDAÇÃO AO VIVO CONCLUÍDA COM SUCESSO!\n');
   } catch (err) {
     console.error('❌ Erro na validação remota:', err.message);
