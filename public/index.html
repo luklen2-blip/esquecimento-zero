@@ -86,8 +86,10 @@
         <a href="/calendario" data-route="/calendario" class="nav-link px-3.5 py-2 text-sm font-medium rounded-lg text-slate-600 hover:text-brand-600 hover:bg-slate-50 transition-colors flex items-center gap-2">
           <i data-lucide="calendar" class="w-4 h-4"></i> Calendário
         </a>
-        <a href="/lembretes" data-route="/lembretes" class="nav-link px-3.5 py-2 text-sm font-medium rounded-lg text-slate-600 hover:text-brand-600 hover:bg-slate-50 transition-colors flex items-center gap-2">
-          <i data-lucide="bell" class="w-4 h-4"></i> Lembretes
+        <a href="/lembretes" data-route="/lembretes" id="nav-link-lembretes" class="nav-link px-3.5 py-2 text-sm font-medium rounded-lg text-slate-600 hover:text-brand-600 hover:bg-slate-50 transition-colors flex items-center gap-1.5 relative">
+          <i data-lucide="bell" class="w-4 h-4"></i>
+          <span>Alertas</span>
+          <span id="desktop-bell-badge" class="hidden px-1.5 py-0.5 rounded-full text-[10px] font-black bg-rose-600 text-white min-w-[18px] text-center shadow-sm"></span>
         </a>
         <a href="/historico" data-route="/historico" class="nav-link px-3.5 py-2 text-sm font-medium rounded-lg text-slate-600 hover:text-brand-600 hover:bg-slate-50 transition-colors flex items-center gap-2">
           <i data-lucide="archive" class="w-4 h-4"></i> Histórico
@@ -159,8 +161,11 @@
       </div>
       <span class="text-[10px] font-semibold text-brand-700 mt-1">Novo</span>
     </a>
-    <a href="/lembretes" data-route="/lembretes" class="mobile-nav-link flex flex-col items-center py-1 px-3 text-slate-500 hover:text-brand-600 rounded-lg">
-      <i data-lucide="bell" class="w-5 h-5"></i>
+    <a href="/lembretes" data-route="/lembretes" class="mobile-nav-link flex flex-col items-center py-1 px-3 text-slate-500 hover:text-brand-600 rounded-lg relative">
+      <div class="relative">
+        <i data-lucide="bell" class="w-5 h-5"></i>
+        <span id="mobile-bell-badge" class="hidden absolute -top-1.5 -right-2 px-1 py-0.2 rounded-full text-[9px] font-black bg-rose-600 text-white min-w-[16px] text-center shadow-sm"></span>
+      </div>
       <span class="text-[10px] font-medium mt-0.5">Alertas</span>
     </a>
     <a href="/perfil" data-route="/perfil" class="mobile-nav-link flex flex-col items-center py-1 px-3 text-slate-500 hover:text-brand-600 rounded-lg">

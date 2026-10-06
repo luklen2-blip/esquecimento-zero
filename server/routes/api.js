@@ -7,6 +7,7 @@ import { authController } from '../controllers/authController.js';
 import { dashboardController } from '../controllers/dashboardController.js';
 import { documentController } from '../controllers/documentController.js';
 import { itemController } from '../controllers/itemController.js';
+import { reminderController } from '../controllers/reminderController.js';
 import { webhookController } from '../controllers/webhookController.js';
 import { requireAuth } from '../middleware/auth.js';
 import { authLimiter } from '../middleware/security.js';
@@ -69,6 +70,9 @@ router.get('/documents/:id', requireAuth, documentController.getById);
 router.post('/items', requireAuth, itemController.create);
 router.get('/items', requireAuth, itemController.list);
 router.delete('/items/:id', requireAuth, itemController.delete);
+
+// Rota de Lembretes e Alertas (Central de Alertas)
+router.get('/reminders', requireAuth, reminderController.list);
 
 // Categorias disponíveis
 router.get('/categories', requireAuth, async (req, res) => {

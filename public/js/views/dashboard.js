@@ -494,7 +494,10 @@ function renderDashboardContent(container, data, user) {
               </div>
               <h2 class="text-base font-bold text-slate-900">Garantias Próximas do Fim</h2>
             </div>
-            <span class="text-xs text-slate-400 font-medium">${warrantiesEnding.length} alertas</span>
+            <div class="flex items-center gap-3">
+              <span class="text-xs text-slate-400 font-medium">${warrantiesEnding.length} alertas</span>
+              <a href="/lembretes" class="text-[11px] font-semibold text-brand-600 hover:underline">Ver na Central →</a>
+            </div>
           </div>
 
           ${
@@ -553,7 +556,10 @@ function renderDashboardContent(container, data, user) {
               </div>
               <h2 class="text-base font-bold text-slate-900">Produtos Próximos da Validade</h2>
             </div>
-            <span class="text-xs text-slate-400 font-medium">${expirationsNear.length} itens</span>
+            <div class="flex items-center gap-3">
+              <span class="text-xs text-slate-400 font-medium">${expirationsNear.length} itens</span>
+              <a href="/lembretes" class="text-[11px] font-semibold text-brand-600 hover:underline">Ver na Central →</a>
+            </div>
           </div>
 
           ${

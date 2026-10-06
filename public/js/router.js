@@ -6,11 +6,11 @@ import { renderAdicionar, initAdicionarEvents } from './views/adicionar.js';
 import { renderHistorico, initHistoricoEvents } from './views/historico.js';
 import {
   renderCalendario,
-  renderLembretes,
   renderPerfil,
   initPerfilEvents,
   renderPlanos
 } from './views/placeholders.js';
+import { renderLembretes, initLembretesEvents } from './views/lembretes.js';
 import { renderGuia } from './views/guia.js';
 
 const routes = {
@@ -20,7 +20,7 @@ const routes = {
   '/dashboard': { title: 'Dashboard - Esquecimento Zero', render: renderDashboard, init: initDashboardEvents, isProtected: true },
   '/adicionar': { title: 'Novo Item - Esquecimento Zero', render: renderAdicionar, init: initAdicionarEvents, isProtected: true },
   '/calendario': { title: 'Calendário - Esquecimento Zero', render: renderCalendario, isProtected: true },
-  '/lembretes': { title: 'Lembretes - Esquecimento Zero', render: renderLembretes, isProtected: true },
+  '/lembretes': { title: 'Central de Alertas - Esquecimento Zero', render: renderLembretes, init: initLembretesEvents, isProtected: true },
   '/historico': { title: 'Histórico de Documentos - Esquecimento Zero', render: renderHistorico, init: initHistoricoEvents, isProtected: true },
   '/perfil': { title: 'Meu Perfil - Esquecimento Zero', render: renderPerfil, init: initPerfilEvents, isProtected: true },
   '/planos': { title: 'Planos e Preços - Esquecimento Zero', render: renderPlanos, isProtected: false },
@@ -84,6 +84,10 @@ export function handleRoute() {
   }
 
   updateNavUI(path);
+
+  if (authStorage.isAuthenticated() && window.ezUpdateNotificationBadge) {
+    window.ezUpdateNotificationBadge();
+  }
 
   if (window.lucide) {
     window.lucide.createIcons();

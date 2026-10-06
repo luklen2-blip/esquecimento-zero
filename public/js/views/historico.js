@@ -240,6 +240,7 @@ window.deleteItemAction = async (id, title) => {
   try {
     await api.items.delete(id);
     showToast('Item removido com sucesso!', 'success');
+    if (window.ezUpdateNotificationBadge) window.ezUpdateNotificationBadge();
     cachedItems = cachedItems.filter(i => i.id !== id);
     const container = document.getElementById('historico-content-area');
     const searchInput = document.getElementById('input-search');

@@ -60,6 +60,51 @@ function renderHeaderUserActions() {
   }
 }
 
+// Atualizador do Contador Dinâmico do Sino de Notificações
+export async function updateNotificationBadge() {
+  if (!authStorage.isAuthenticated()) {
+    const desktopBadge = document.getElementById('desktop-bell-badge');
+    const mobileBadge = document.getElementById('mobile-bell-badge');
+    if (desktopBadge) desktopBadge.classList.add('hidden');
+    if (mobileBadge) mobileBadge.classList.add('hidden');
+    return;
+  }
+
+  try {
+    const res = await api.reminders.list();
+    const attentionCount = res?.summary?.attentionCount || 0;
+
+    const desktopBadge = document.getElementById('desktop-bell-badge');
+    const mobileBadge = document.getElementById('mobile-bell-badge');
+
+    const badgeText = attentionCount > 9 ? '9+' : String(attentionCount);
+
+    if (desktopBadge) {
+      if (attentionCount > 0) {
+        desktopBadge.textContent = badgeText;
+        desktopBadge.classList.remove('hidden');
+        desktopBadge.setAttribute('aria-label', `${attentionCount} alertas precisam da sua atenção`);
+      } else {
+        desktopBadge.classList.add('hidden');
+      }
+    }
+
+    if (mobileBadge) {
+      if (attentionCount > 0) {
+        mobileBadge.textContent = badgeText;
+        mobileBadge.classList.remove('hidden');
+        mobileBadge.setAttribute('aria-label', `${attentionCount} alertas precisam da sua atenção`);
+      } else {
+        mobileBadge.classList.add('hidden');
+      }
+    }
+  } catch (err) {
+    // Falha silenciosa para não degradar a experiência
+  }
+}
+
+window.ezUpdateNotificationBadge = updateNotificationBadge;
+
 // Inicializador da aplicação
 async function initApp() {
   renderHeaderUserActions();
@@ -67,14 +112,23 @@ async function initApp() {
   // Escuta alterações de estado de autenticação
   window.addEventListener('ez:auth-change', (e) => {
     renderHeaderUserActions();
+    updateNotificationBadge();
     handleRoute();
   });
 
-  // Se já houver token, valida em background
+  // Atualiza sino ao retornar foco para a aba
+  window.addEventListener('focus', () => {
+    if (authStorage.isAuthenticated()) {
+      updateNotificationBadge();
+    }
+  });
+
+  // Se já houver token, valida em background e atualiza sino
   if (authStorage.isAuthenticated()) {
     try {
       await api.auth.me();
       renderHeaderUserActions();
+      updateNotificationBadge();
     } catch (err) {
       console.warn('[App] Sessão não pôde ser renovada:', err.message);
     }

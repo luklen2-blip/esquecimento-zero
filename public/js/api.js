@@ -194,5 +194,11 @@ export const api = {
     async list() {
       return await apiRequest('/api/categories');
     }
+  },
+
+  reminders: {
+    async list() {
+      return await apiRequest('/api/reminders');
+    }
   }
 };
