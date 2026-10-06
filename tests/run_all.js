@@ -98,6 +98,7 @@ async function runTestSuite() {
     assert(health.body.status === 'ok', 'Status da aplicação reportado como "ok"');
     assert(health.body.app === 'Esquecimento Zero', 'Nome da aplicação validado');
     assert(typeof health.body.uptime_seconds === 'number', 'Uptime em segundos presente');
+    assert(health.body.database === 'POSTGRESQL' || health.body.database === 'JSONDB FALLBACK', 'Diagnóstico de motor de banco presente');
 
     // 2. Resolução de Arquivos Estáticos e SPA Fallback
     console.log('\n🌐 Testando Resolução SPA e Arquivos Estáticos:');

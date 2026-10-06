@@ -5,6 +5,7 @@ import { fileURLToPath } from 'url';
 import apiRouter from './routes/api.js';
 import { applySecurityHeaders, globalLimiter } from './middleware/security.js';
 import { runSeed } from './database/seed.js';
+import { isPostgresConfigured } from './database/postgres.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -31,6 +32,7 @@ app.get('/api/health', (req, res) => {
     status: 'ok',
     app: APP_NAME,
     version: '2.0.0',
+    database: isPostgresConfigured() ? 'POSTGRESQL' : 'JSONDB FALLBACK',
     uptime_seconds: Math.floor(process.uptime()),
     timestamp: new Date().toISOString()
   });

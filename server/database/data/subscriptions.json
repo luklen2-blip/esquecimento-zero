@@ -148,35 +148,5 @@
     "id": "sub_1791244303910_eatjw",
     "createdAt": "2026-10-05T23:51:43.910Z",
     "updatedAt": "2026-10-05T23:51:43.910Z"
-  },
-  {
-    "userId": "use_1791245396865_n9un0",
-    "plan": "free",
-    "status": "active",
-    "itemsLimit": 10,
-    "features": {
-      "aiProcessing": false,
-      "unlimitedItems": false,
-      "advancedReminders": false,
-      "exportData": false
-    },
-    "id": "sub_1791245396869_tfslp",
-    "createdAt": "2026-10-06T00:09:56.869Z",
-    "updatedAt": "2026-10-06T00:09:56.869Z"
-  },
-  {
-    "userId": "use_1791245526893_j135u",
-    "plan": "free",
-    "status": "active",
-    "itemsLimit": 10,
-    "features": {
-      "aiProcessing": false,
-      "unlimitedItems": false,
-      "advancedReminders": false,
-      "exportData": false
-    },
-    "id": "sub_1791245526897_1rzai",
-    "createdAt": "2026-10-06T00:12:06.897Z",
-    "updatedAt": "2026-10-06T00:12:06.897Z"
   }
 ]

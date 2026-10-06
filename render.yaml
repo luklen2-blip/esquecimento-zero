@@ -1,3 +1,10 @@
+databases:
+  - name: esquecimento-zero-db
+    databaseName: esquecimentozero
+    user: esquecimento
+    plan: free
+    region: oregon
+
 services:
   - type: web
     name: esquecimento-zero
@@ -16,4 +23,6 @@ services:
       - key: PORT
         value: 3000
       - key: DATABASE_URL
-        sync: false
+        fromDatabase:
+          name: esquecimento-zero-db
+          property: connectionString
